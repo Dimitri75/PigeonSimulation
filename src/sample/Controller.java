@@ -32,7 +32,7 @@ public class Controller {
 
     @FXML
     public void nbPigeonsChosen() {
-        //try {
+        try {
             int nbPigeons = Integer.parseInt(textField_nbPigeons.getText());
             removeAllPigeons();
             label_error.setText("");
@@ -44,11 +44,11 @@ public class Controller {
                 bodyPane.getChildren().add(pigeon.getBody());
                 pigeons.add(pigeon);
             }
-        /*} catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             label_error.setText("Vous devez saisir un nombre entier.");
         } catch (Exception e) {
             label_error.setText("Bravo ! Maintenant c'est cassé. :(");
-        }*/
+        }
     }
 
     @FXML
