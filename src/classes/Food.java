@@ -3,22 +3,27 @@ package classes;
 import enumerations.FoodState;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import utils.ResourcesUtils;
 
 
 /**
  * Created by Dimitri on 21/10/2015.
  */
 public class Food {
-    private FoodState foodState;
     private Location location;
+    private FoodState foodState;
     private Rectangle body;
+    private Integer foodIndex;
 
     public Food(int x, int y){
-        this.setFoodState(FoodState.GOOD);
-        setLocation(new Location(x, y));
-        setBody(new Rectangle(x, y, 5, 5));
-        getBody().setFill(Color.WHITE);
-        getBody().setStrokeWidth(1);
+        location = new Location(x, y);
+        foodState = FoodState.GOOD;
+
+        foodIndex = ResourcesUtils.getInstance().getRandomFoodIndex();
+        body = new Rectangle(50, 50);
+        body.setFill(ResourcesUtils.getInstance().getGoodFood(foodIndex));
+        body.setX(x);
+        body.setY(y);
     }
 
     public FoodState getFoodState() {
@@ -27,6 +32,7 @@ public class Food {
 
     public void setFoodState(FoodState foodState) {
         this.foodState = foodState;
+        body.setFill(ResourcesUtils.getInstance().getBadFood(foodIndex));
     }
 
     public Location getLocation() {

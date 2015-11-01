@@ -1,24 +1,26 @@
 package classes;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import utils.ResourcesUtils;
 
 /**
  * Created by Dimitri on 21/10/2015.
  */
-public class Pigeon{
+public class Pigeon {
     private Location location;
-    private Circle body;
+    private Integer pigeonIndex;
+    private Rectangle body;
 
-    public Pigeon(int x, int y){
+    public Pigeon(int x, int y) {
         location = new Location(x, y);
 
-        body = new Circle(5);
-        body.setCenterX(x);
-        body.setCenterY(y);
-        body.setFill(Color.TRANSPARENT);
-        body.setStroke(Color.BLACK);
-        body.setStrokeWidth(1);
+        pigeonIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
+        body = new Rectangle(100, 100);
+        body.setFill(ResourcesUtils.getInstance().getBird(pigeonIndex));
+        body.setX(x);
+        body.setY(y);
     }
 
     public Location getLocation() {
@@ -29,11 +31,11 @@ public class Pigeon{
         this.location = location;
     }
 
-    public Circle getBody() {
+    public Rectangle getBody() {
         return body;
     }
 
-    public void setBody(Circle body) {
+    public void setBody(Rectangle body) {
         this.body = body;
     }
 
