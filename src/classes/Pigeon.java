@@ -1,27 +1,15 @@
 package classes;
 
-<<<<<<< HEAD
-import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.util.Duration;
-=======
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+
 import utils.ResourcesUtils;
->>>>>>> develop
 
 /**
  * Created by Dimitri on 21/10/2015.
  */
-<<<<<<< HEAD
+
 public class Pigeon extends Thread{
-=======
-public class Pigeon {
->>>>>>> develop
+
     private Location location;
     private Integer pigeonIndex;
     private Rectangle body;
@@ -29,22 +17,12 @@ public class Pigeon {
     public Pigeon(int x, int y) {
         location = new Location(x, y);
 
-<<<<<<< HEAD
-        body = new Circle(5);
-        body.setCenterX(x);
-        body.setCenterY(y);
-        body.setFill(Color.TRANSPARENT);
-        body.setStroke(Color.BLACK);
-        body.setStrokeWidth(1);
-
-        super.start();
-=======
         pigeonIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
         body = new Rectangle(100, 100);
         body.setFill(ResourcesUtils.getInstance().getBird(pigeonIndex));
         body.setX(x);
         body.setY(y);
->>>>>>> develop
+        super.start();
     }
 
     public Location getLocation() {
@@ -64,10 +42,9 @@ public class Pigeon {
     }
 
     public void foodSeen(int x, int y){
-        body.setCenterX(x);
-        body.setCenterY(y);
-
-        body.setTranslateX();
+        body.setX(x);
+        body.setY(y);
+        body.setTranslateX(10);
     }
 
     public void foodEaten(int x, int y){
