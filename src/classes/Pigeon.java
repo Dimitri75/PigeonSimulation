@@ -1,22 +1,35 @@
 package classes;
 
+<<<<<<< HEAD
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+=======
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import utils.ResourcesUtils;
+>>>>>>> develop
 
 /**
  * Created by Dimitri on 21/10/2015.
  */
+<<<<<<< HEAD
 public class Pigeon extends Thread{
+=======
+public class Pigeon {
+>>>>>>> develop
     private Location location;
-    private Circle body;
+    private Integer pigeonIndex;
+    private Rectangle body;
 
-    public Pigeon(int x, int y){
+    public Pigeon(int x, int y) {
         location = new Location(x, y);
 
+<<<<<<< HEAD
         body = new Circle(5);
         body.setCenterX(x);
         body.setCenterY(y);
@@ -25,6 +38,13 @@ public class Pigeon extends Thread{
         body.setStrokeWidth(1);
 
         super.start();
+=======
+        pigeonIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
+        body = new Rectangle(100, 100);
+        body.setFill(ResourcesUtils.getInstance().getBird(pigeonIndex));
+        body.setX(x);
+        body.setY(y);
+>>>>>>> develop
     }
 
     public Location getLocation() {
@@ -35,11 +55,11 @@ public class Pigeon extends Thread{
         this.location = location;
     }
 
-    public Circle getBody() {
+    public Rectangle getBody() {
         return body;
     }
 
-    public void setBody(Circle body) {
+    public void setBody(Rectangle body) {
         this.body = body;
     }
 

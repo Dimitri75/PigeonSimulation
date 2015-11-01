@@ -12,48 +12,49 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 public class Controller {
+    private static Integer WIDTH = 1200;
+    private static Integer HEIGHT = 700;
+
     @FXML
-    private TextField nbPigeonTxt;
+    private TextField textField_nbPigeons;
     @FXML
-    private Button nbPigeonBtn;
+    private Button button_nbPigeons;
     @FXML
-    private Label errorLbl;
+    private Label label_error;
     @FXML
     private AnchorPane bodyPane;
 
     private Stack<Food> foods = new Stack<Food>();
-    private ArrayList<Pigeon> pigeons = new ArrayList<>();
-
+    private List<Pigeon> pigeons = new ArrayList<>();
 
     @FXML
-    public void nbPigeonChosen() {
-        try {
-            Pigeon pigeon;
-            Random random = new Random();
-            int nbPigeons = Integer.parseInt(nbPigeonTxt.getText());
-
+    public void nbPigeonsChosen() {
+        //try {
+            int nbPigeons = Integer.parseInt(textField_nbPigeons.getText());
             removeAllPigeons();
-            errorLbl.setText("");
+            label_error.setText("");
 
+            Random random = new Random();
+            Pigeon pigeon;
             for (int i = 0; i < nbPigeons; i++) {
-                pigeon = new Pigeon(random.nextInt((1200) + 1), random.nextInt((600) + 1));
+                pigeon = new Pigeon(random.nextInt(WIDTH), random.nextInt(HEIGHT));
                 bodyPane.getChildren().add(pigeon.getBody());
                 pigeons.add(pigeon);
             }
+        /*} catch (NumberFormatException e) {
+            label_error.setText("Vous devez saisir un nombre entier.");
         } catch (Exception e) {
-            errorLbl.setText("Vous devez saisir un nombre entier");
-        }
+            label_error.setText("Bravo ! Maintenant c'est cassé. :(");
+        }*/
     }
 
     @FXML
-    void verifyIfEnterKey(KeyEvent event) {
+    void onPressEnter(KeyEvent event) {
         if (event.getCode().toString().equals("ENTER")) {
-            nbPigeonBtn.fire();
+            button_nbPigeons.fire();
         }
     }
 
@@ -69,7 +70,6 @@ public class Controller {
         if (!foods.empty()) {
             Food badFood = foods.peek();
             badFood.setFoodState(FoodState.BAD);
-            badFood.getBody().setFill(Color.BLACK);
         }
         Food food = new Food((int) e.getSceneX(), (int) e.getSceneY());
         bodyPane.getChildren().add(food.getBody());
