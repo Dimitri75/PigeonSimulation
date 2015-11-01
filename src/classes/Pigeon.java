@@ -1,12 +1,16 @@
 package classes;
 
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
 /**
  * Created by Dimitri on 21/10/2015.
  */
-public class Pigeon{
+public class Pigeon extends Thread{
     private Location location;
     private Circle body;
 
@@ -19,6 +23,8 @@ public class Pigeon{
         body.setFill(Color.TRANSPARENT);
         body.setStroke(Color.BLACK);
         body.setStrokeWidth(1);
+
+        super.start();
     }
 
     public Location getLocation() {
@@ -35,6 +41,17 @@ public class Pigeon{
 
     public void setBody(Circle body) {
         this.body = body;
+    }
+
+    public void foodSeen(int x, int y){
+        body.setCenterX(x);
+        body.setCenterY(y);
+
+        body.setTranslateX();
+    }
+
+    public void foodEaten(int x, int y){
+
     }
 
 }

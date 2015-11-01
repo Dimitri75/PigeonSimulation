@@ -74,5 +74,9 @@ public class Controller {
         Food food = new Food((int) e.getSceneX(), (int) e.getSceneY());
         bodyPane.getChildren().add(food.getBody());
         foods.push(food);
+
+        for (Pigeon pigeon : pigeons){
+            pigeon.foodSeen(food.getLocation().getX(), food.getLocation().getY());
+        }
     }
 }
