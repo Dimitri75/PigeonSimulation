@@ -15,8 +15,8 @@ import javafx.scene.layout.AnchorPane;
 import java.util.*;
 
 public class Controller {
-    private static Integer WIDTH = 1200;
-    private static Integer HEIGHT = 700;
+    private static Integer WIDTH = 1100;
+    private static Integer HEIGHT = 500;
 
     @FXML
     private TextField textField_nbPigeons;
