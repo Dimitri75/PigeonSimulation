@@ -1,5 +1,6 @@
 package sample;
 
+import classes.CircularQueue;
 import classes.Food;
 import classes.Pigeon;
 import enumerations.FoodState;
@@ -10,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 
 import java.util.*;
 
@@ -27,8 +27,8 @@ public class Controller {
     @FXML
     private AnchorPane bodyPane;
 
-    private Stack<Food> foods = new Stack<Food>();
-    private List<Pigeon> pigeons = new ArrayList<>();
+    private CircularQueue<Food> foodCircularQueue = new CircularQueue(5);
+    private List<Pigeon> pigeonList = new ArrayList<>();
 
     @FXML
     public void nbPigeonsChosen() {
@@ -42,7 +42,7 @@ public class Controller {
             for (int i = 0; i < nbPigeons; i++) {
                 pigeon = new Pigeon(random.nextInt(WIDTH), random.nextInt(HEIGHT));
                 bodyPane.getChildren().add(pigeon.getBody());
-                pigeons.add(pigeon);
+                pigeonList.add(pigeon);
             }
         } catch (NumberFormatException e) {
             label_error.setText("Vous devez saisir un nombre entier.");
@@ -59,24 +59,28 @@ public class Controller {
     }
 
     public void removeAllPigeons(){
-        for (Pigeon pigeon : pigeons){
+        for (Pigeon pigeon : pigeonList){
             bodyPane.getChildren().remove(pigeon.getBody());
         }
-        pigeons.clear();
+        pigeonList.clear();
     }
 
     @FXML
     public void putFood(MouseEvent e){
-        if (!foods.empty()) {
-            Food badFood = foods.peek();
-            badFood.setFoodState(FoodState.BAD);
+        if (!foodCircularQueue.isEmpty()) {
+            foodCircularQueue.peek().setFoodState(FoodState.BAD);
         }
+
         Food food = new Food((int) e.getSceneX(), (int) e.getSceneY());
         bodyPane.getChildren().add(food.getBody());
-        foods.push(food);
 
-        for (Pigeon pigeon : pigeons){
+        Food excedent = foodCircularQueue.pushAndPopExcedent(food);
+        if (excedent != null)
+            bodyPane.getChildren().remove(excedent.getBody());
+
+        /*for (Pigeon pigeon : pigeonList){
             pigeon.foodSeen(food.getLocation().getX(), food.getLocation().getY());
-        }
+        }*/
     }
 }
+

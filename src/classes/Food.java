@@ -20,7 +20,7 @@ public class Food {
         foodState = FoodState.GOOD;
 
         foodIndex = ResourcesUtils.getInstance().getRandomFoodIndex();
-        body = new Rectangle(50, 50);
+        body = new Rectangle(65, 65);
         body.setFill(ResourcesUtils.getInstance().getGoodFood(foodIndex));
         body.setX(x);
         body.setY(y);
@@ -32,7 +32,16 @@ public class Food {
 
     public void setFoodState(FoodState foodState) {
         this.foodState = foodState;
-        body.setFill(ResourcesUtils.getInstance().getBadFood(foodIndex));
+
+        switch (foodState){
+            case BAD :
+                body.setFill(ResourcesUtils.getInstance().getBadFood(foodIndex));
+                break;
+            default:
+                body.setFill(ResourcesUtils.getInstance().getGoodFood(foodIndex));
+                break;
+        }
+
     }
 
     public Location getLocation() {
