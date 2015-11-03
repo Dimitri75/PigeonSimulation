@@ -5,6 +5,5 @@ package enumerations;
  */
 public enum FoodState {
     GOOD,
-    BAD,
-    DECOMPOSED
+    BAD
 }

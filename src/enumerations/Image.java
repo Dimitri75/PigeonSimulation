@@ -19,7 +19,9 @@ public enum Image {
     BLUE_BIRD("res/images/blue_bird.png"),
     RED_BIRD("res/images/red_bird.png"),
     BROWN_BIRD("res/images/brown_bird.png"),
-    GREEN_BIRD("res/images/green_bird.png");
+    GREEN_BIRD("res/images/green_bird.png"),
+
+    CHILD("res/images/isaac.png");
 
     private String name = "";
 

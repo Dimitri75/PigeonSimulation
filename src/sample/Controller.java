@@ -1,13 +1,12 @@
 package sample;
 
-import classes.CircularQueue;
-import classes.Food;
-import classes.Pigeon;
+import classes.*;
+import classes.Character;
 import enumerations.FoodState;
+import enumerations.Image;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -15,54 +14,93 @@ import javafx.scene.layout.AnchorPane;
 import java.util.*;
 
 public class Controller {
-    private static Integer WIDTH = 1100;
-    private static Integer HEIGHT = 500;
-
     @FXML
-    private TextField textField_nbPigeons;
-    @FXML
-    private Button button_nbPigeons;
+    private Button button_start;
     @FXML
     private Label label_error;
     @FXML
-    private AnchorPane bodyPane;
+    private AnchorPane anchorPane;
 
     private CircularQueue<Food> foodCircularQueue = new CircularQueue(5);
-    private List<Pigeon> pigeonList = new ArrayList<>();
+    private List<Character> characterList = new ArrayList<>();
+    private Character child;
 
-    @FXML
-    public void nbPigeonsChosen() {
+    public Controller() {
+
+    }
+
+    public void initChild(){
+        child = new Character(0, 0, Image.CHILD);
+        anchorPane.getChildren().add(child.getShape());
+
+
+        anchorPane.getScene().addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            int pace = 5;
+            double x = child.getShape().getX();
+            double y = child.getShape().getY();
+
+            switch (event.getCode()){
+                case UP:
+                    if (y - pace > 0)
+                        child.getShape().setY(y - pace);
+                    break;
+                case DOWN:
+                    if (y + pace + child.getShape().getHeight() < anchorPane.getPrefHeight())
+                        child.getShape().setY(y + pace);
+                    break;
+                case LEFT:
+                    if (x - pace > 0)
+                        child.getShape().setX(x - pace);
+                    break;
+                case RIGHT:
+                    if (x + pace + child.getShape().getWidth() < anchorPane.getPrefWidth())
+                        child.getShape().setX(x + pace);
+                    break;
+            }
+        });
+    }
+
+    public void initPigeons(){
         try {
-            int nbPigeons = Integer.parseInt(textField_nbPigeons.getText());
-            removeAllPigeons();
+            removeAllCharacters();
             label_error.setText("");
 
+            int nbPigeons = 8;
             Random random = new Random();
-            Pigeon pigeon;
+            Character character;
             for (int i = 0; i < nbPigeons; i++) {
-                pigeon = new Pigeon(random.nextInt(WIDTH), random.nextInt(HEIGHT));
-                bodyPane.getChildren().add(pigeon.getBody());
-                pigeonList.add(pigeon);
+                character = new Character(random.nextInt((int) anchorPane.getWidth() - 100), random.nextInt((int) anchorPane.getHeight() - 100));
+                anchorPane.getChildren().add(character.getShape());
+                characterList.add(character);
             }
-        } catch (NumberFormatException e) {
-            label_error.setText("Vous devez saisir un nombre entier.");
         } catch (Exception e) {
             label_error.setText("Bravo ! Maintenant c'est cassé. :(");
         }
     }
 
     @FXML
+    public void start() {
+        initPigeons();
+        initChild();
+    }
+
+    @FXML
     void onPressEnter(KeyEvent event) {
         if (event.getCode().toString().equals("ENTER")) {
-            button_nbPigeons.fire();
+            button_start.fire();
         }
     }
 
-    public void removeAllPigeons(){
-        for (Pigeon pigeon : pigeonList){
-            bodyPane.getChildren().remove(pigeon.getBody());
+    public void removeAllCharacters(){
+        for (Character character : characterList){
+            anchorPane.getChildren().remove(character.getShape());
         }
-        pigeonList.clear();
+        characterList.clear();
+
+        if (child != null) {
+            anchorPane.getChildren().remove(child.getShape());
+            child = null;
+        }
     }
 
     @FXML
@@ -72,13 +110,13 @@ public class Controller {
         }
 
         Food food = new Food((int) e.getSceneX(), (int) e.getSceneY());
-        bodyPane.getChildren().add(food.getBody());
+        anchorPane.getChildren().add(food.getBody());
 
         Food excedent = foodCircularQueue.pushAndPopExcedent(food);
         if (excedent != null)
-            bodyPane.getChildren().remove(excedent.getBody());
+            anchorPane.getChildren().remove(excedent.getBody());
 
-        /*for (Pigeon pigeon : pigeonList){
+        /*for (Character pigeon : characterList){
             pigeon.foodSeen(food.getLocation().getX(), food.getLocation().getY());
         }*/
     }
