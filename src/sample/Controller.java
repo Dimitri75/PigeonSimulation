@@ -110,11 +110,11 @@ public class Controller {
         }
 
         Food food = new Food((int) e.getSceneX(), (int) e.getSceneY());
-        anchorPane.getChildren().add(food.getBody());
+        anchorPane.getChildren().add(food.getShape());
 
         Food excedent = foodCircularQueue.pushAndPopExcedent(food);
         if (excedent != null)
-            anchorPane.getChildren().remove(excedent.getBody());
+            anchorPane.getChildren().remove(excedent.getShape());
 
         /*for (Character pigeon : characterList){
             pigeon.foodSeen(food.getLocation().getX(), food.getLocation().getY());
