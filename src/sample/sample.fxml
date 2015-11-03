@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -9,14 +10,19 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<BorderPane prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <center>
-        <AnchorPane fx:id="bodyPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: rgba(141, 215, 138, 0.67);" onMouseClicked="#putFood" />
+        <AnchorPane fx:id="gridPane" onMouseClicked="#putFood" prefHeight="600.0" prefWidth="1200.0" style="-fx-background-color: rgba(141, 215, 138, 0.67);">
+         <children>
+            <!--<Canvas fx:id="gridPane" height="600.0" width="1200.0" />-->
+         </children>
+        </AnchorPane>
+
     </center>
     <bottom>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: rgb(75, 79, 77);" BorderPane.alignment="BOTTOM_CENTER">
             <children>
-            <Label fx:id="label_error" prefHeight="17.0" textFill="white" alignment="BOTTOM_CENTER">
+            <Label fx:id="label_error" alignment="BOTTOM_CENTER" prefHeight="17.0" textFill="white">
                <HBox.margin>
                   <Insets top="60.0" />
                </HBox.margin>
