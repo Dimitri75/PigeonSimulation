@@ -68,7 +68,7 @@ public class Graph {
 				leftVertex = tmpVertex;
 
 				if (y != 0){
-					Vertex upVertex = getVertexByLocation(x, y -= pace);
+					Vertex upVertex = getVertexByLocation(x, y - pace);
 					addEdge(tmpVertex, upVertex, MovementSpeed.NORMAL);
 				}
 			}

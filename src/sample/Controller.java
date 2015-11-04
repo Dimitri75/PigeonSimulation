@@ -98,13 +98,13 @@ public class Controller {
     }
 
     public void initGraph(){
-        graph = new Graph((int)anchorPane.getWidth(), (int)anchorPane.getHeight(), PACE);   // TODO FIX : La génération des vertex et edges prend trop de temps + vérifier ce qui est généré
+        graph = new Graph((int)anchorPane.getWidth(), (int)anchorPane.getHeight(), PACE);   // TODO : vérifier ce qui est généré
     }
 
     @FXML
     public void start() {
         clearAll();
-        //initGraph();
+        initGraph();
         initPigeons();
         initChild();
         started = true;
