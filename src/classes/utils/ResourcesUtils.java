@@ -1,9 +1,8 @@
-package utils;
+package classes.utils;
 
-import enumerations.Image;
+import classes.enumerations.Image;
 import javafx.scene.paint.ImagePattern;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;

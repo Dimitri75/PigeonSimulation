@@ -1,4 +1,4 @@
-package enumerations;
+package classes.enumerations;
 
 /**
  * Created by Dimitri on 01/11/2015.

@@ -1,6 +1,6 @@
 package classes.graph;
 
-import enumerations.MovementSpeed;
+import classes.enumerations.MovementSpeed;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,14 +11,16 @@ import java.util.PriorityQueue;
  * Created by Dimitri on 21/10/2015.
  */
 public class Graph {
-	private int width;
-	private int height;
-	private ArrayList<Vertex> listVertex;
-	private ArrayList<Edge> listEdges;
+	private Integer pace;
+	private Integer width;
+	private Integer height;
+	private List<Vertex> listVertex;
+	private List<Edge> listEdges;
 
-	public Graph(int width, int height) {
+	public Graph(Integer width, Integer height, Integer pace) {
 		this.width = width;
 		this.height = height;
+		this.pace = pace;
 
 		listVertex = new ArrayList<>();
 		listEdges = new ArrayList<>();
@@ -26,11 +28,11 @@ public class Graph {
 		init();
 	}
 
-	public ArrayList<Vertex> getListVertex() {
+	public List<Vertex> getListVertex() {
 		return listVertex;
 	}
 
-	public ArrayList<Edge> getListEdges() {
+	public List<Edge> getListEdges() {
 		return listEdges;
 	}
 
@@ -40,13 +42,13 @@ public class Graph {
 		return edge;
 	}
 
-	public Vertex addVertex(int x, int y) {
+	public Vertex addVertex(Integer x, Integer y) {
 		Vertex vertex = new Vertex(x, y);
 		listVertex.add(vertex);
 		return vertex;
 	}
 
-	public Vertex getVertexByLocation(int x, int y){
+	public Vertex getVertexByLocation(Integer x, Integer y){
 		for (Vertex vertex : listVertex)
 			if (vertex.getX() == x && vertex.getY() == y)
 				return vertex;
@@ -55,10 +57,10 @@ public class Graph {
 	}
 
 	public void init(){
-		for (int y = 0; y <= height; y++){
+		for (int y = 0; y <= height; y += pace){
 
 			Vertex leftVertex = null;
-			for (int x = 0; x <= width; x++){
+			for (int x = 0; x <= width; x += pace){
 				Vertex tmpVertex = addVertex(x, y);
 
 				if (leftVertex != null)
@@ -66,7 +68,7 @@ public class Graph {
 				leftVertex = tmpVertex;
 
 				if (y != 0){
-					Vertex upVertex = getVertexByLocation(x, y - 1);
+					Vertex upVertex = getVertexByLocation(x, y -= pace);
 					addEdge(tmpVertex, upVertex, MovementSpeed.NORMAL);
 				}
 			}

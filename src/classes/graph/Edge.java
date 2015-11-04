@@ -1,6 +1,6 @@
 package classes.graph;
 
-import enumerations.MovementSpeed;
+import classes.enumerations.MovementSpeed;
 
 /**
  * Created by Dimitri on 21/10/2015.

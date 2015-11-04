@@ -1,11 +1,11 @@
-package classes;
+package classes.list;
 
 import java.util.*;
 
 /**
  * Created by Dimitri on 01/11/2015.
  */
-public class CircularQueue<T> extends LinkedList<T> {
+public class CircularQueue<T> extends LinkedList<T>{
     protected Integer fixedSize;
 
     public CircularQueue(int size){

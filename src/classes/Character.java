@@ -1,18 +1,18 @@
 package classes;
 
+import classes.graph.Location;
 import javafx.scene.shape.Rectangle;
 
-import classes.graph.Vertex;
-import enumerations.Image;
+import classes.enumerations.Image;
 import javafx.scene.paint.ImagePattern;
 
-import utils.ResourcesUtils;
+import classes.utils.ResourcesUtils;
 
 /**
  * Created by Dimitri on 21/10/2015.
  */
 
-public class Character extends Vertex{
+public class Character extends Location implements Runnable{
     private Integer characterIndex;
     private Rectangle shape;
 
@@ -42,4 +42,8 @@ public class Character extends Vertex{
         shape.setTranslateX(10);
     }
 
+    @Override
+    public void run() {
+
+    }
 }

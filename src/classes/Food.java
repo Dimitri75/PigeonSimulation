@@ -1,15 +1,15 @@
 package classes;
 
-import classes.graph.Vertex;
-import enumerations.FoodState;
+import classes.graph.Location;
+import classes.enumerations.FoodState;
 import javafx.scene.shape.Rectangle;
-import utils.ResourcesUtils;
+import classes.utils.ResourcesUtils;
 
 
 /**
  * Created by Dimitri on 21/10/2015.
  */
-public class Food extends Vertex{
+public class Food extends Location{
     private FoodState foodState;
     private Rectangle shape;
     private Integer foodIndex;
