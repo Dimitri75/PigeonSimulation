@@ -1,6 +1,5 @@
 package classes.graph;
 
-import classes.Location;
 import enumerations.MovementSpeed;
 
 import java.util.ArrayList;
@@ -12,12 +11,19 @@ import java.util.PriorityQueue;
  * Created by Dimitri on 21/10/2015.
  */
 public class Graph {
+	private int width;
+	private int height;
 	private ArrayList<Vertex> listVertex;
 	private ArrayList<Edge> listEdges;
 
-	public Graph() {
+	public Graph(int width, int height) {
+		this.width = width;
+		this.height = height;
+
 		listVertex = new ArrayList<>();
 		listEdges = new ArrayList<>();
+
+		init();
 	}
 
 	public ArrayList<Vertex> getListVertex() {
@@ -26,6 +32,45 @@ public class Graph {
 
 	public ArrayList<Edge> getListEdges() {
 		return listEdges;
+	}
+
+	public Edge addEdge(Vertex source, Vertex target, MovementSpeed movementSpeed) {
+		Edge edge = new Edge(source, target, movementSpeed);
+		listEdges.add(edge);
+		return edge;
+	}
+
+	public Vertex addVertex(int x, int y) {
+		Vertex vertex = new Vertex(x, y);
+		listVertex.add(vertex);
+		return vertex;
+	}
+
+	public Vertex getVertexByLocation(int x, int y){
+		for (Vertex vertex : listVertex)
+			if (vertex.getX() == x && vertex.getY() == y)
+				return vertex;
+
+		return null;
+	}
+
+	public void init(){
+		for (int y = 0; y <= height; y++){
+
+			Vertex leftVertex = null;
+			for (int x = 0; x <= width; x++){
+				Vertex tmpVertex = addVertex(x, y);
+
+				if (leftVertex != null)
+					addEdge(tmpVertex, leftVertex, MovementSpeed.NORMAL);
+				leftVertex = tmpVertex;
+
+				if (y != 0){
+					Vertex upVertex = getVertexByLocation(x, y - 1);
+					addEdge(tmpVertex, upVertex, MovementSpeed.NORMAL);
+				}
+			}
+		}
 	}
 
 	public List<Vertex> dijkstra(Vertex start, Vertex destination) {
@@ -67,17 +112,5 @@ public class Graph {
 		Collections.reverse(path);
 
 		return path;
-	}
-
-	public Edge addEdge(Vertex source, Vertex target, MovementSpeed movementSpeed) {
-		Edge edge = new Edge(source, target, movementSpeed);
-		listEdges.add(edge);
-		return edge;
-	}
-
-	public Vertex addVertex(Location location) {
-		Vertex vertex = new Vertex(location);
-		listVertex.add(vertex);
-		return vertex;
 	}
 }

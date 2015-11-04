@@ -26,6 +26,7 @@ public class Edge {
 			break;
 		}
 		source.getAdjacencies().add(this);
+		target.getAdjacencies().add(this);
 	}
 	
 	public Vertex getSource(){

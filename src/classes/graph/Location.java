@@ -1,4 +1,4 @@
-package classes;
+package classes.graph;
 
 /**
  * Created by Dimitri on 21/10/2015.
@@ -6,6 +6,8 @@ package classes;
 public class Location {
     int x;
     int y;
+
+    public Location(){}
 
     public Location(int x, int y){
         this.x = x;
