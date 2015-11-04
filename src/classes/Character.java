@@ -19,14 +19,14 @@ public class Character extends Location implements Runnable{
     public Character(int x, int y) {
         super(x, y);
         characterIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
-        shape = new Rectangle(100, 100);
+        shape = new Rectangle(70, 70);
         shape.setFill(ResourcesUtils.getInstance().getBird(characterIndex));
         shape.setX(x);
         shape.setY(y);
     }
 
     public Character(int x, int y, Image image) {
-        shape = new Rectangle(100, 100);
+        shape = new Rectangle(70, 70);
         shape.setFill(new ImagePattern(new javafx.scene.image.Image(image.toString())));
         shape.setX(x);
         shape.setY(y);

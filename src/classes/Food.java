@@ -18,7 +18,7 @@ public class Food extends Location{
         super(x, y);
         foodState = FoodState.GOOD;
         foodIndex = ResourcesUtils.getInstance().getRandomFoodIndex();
-        shape = new Rectangle(65, 65);
+        shape = new Rectangle(50, 50);
         shape.setFill(ResourcesUtils.getInstance().getGoodFood(foodIndex));
         shape.setX(x);
         shape.setY(y);
