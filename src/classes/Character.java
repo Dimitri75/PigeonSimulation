@@ -1,9 +1,10 @@
 package classes;
 
+import javafx.scene.shape.Rectangle;
+
 import classes.graph.Vertex;
 import enumerations.Image;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 
 import utils.ResourcesUtils;
 
@@ -12,14 +13,14 @@ import utils.ResourcesUtils;
  */
 
 public class Character extends Vertex{
-    private Integer pigeonIndex;
+    private Integer characterIndex;
     private Rectangle shape;
 
     public Character(int x, int y) {
         super(x, y);
-        pigeonIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
+        characterIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
         shape = new Rectangle(100, 100);
-        shape.setFill(ResourcesUtils.getInstance().getBird(pigeonIndex));
+        shape.setFill(ResourcesUtils.getInstance().getBird(characterIndex));
         shape.setX(x);
         shape.setY(y);
     }
@@ -39,10 +40,6 @@ public class Character extends Vertex{
         shape.setX(x);
         shape.setY(y);
         shape.setTranslateX(10);
-    }
-
-    public void foodEaten(int x, int y){
-
     }
 
 }

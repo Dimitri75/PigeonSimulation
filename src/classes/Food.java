@@ -2,7 +2,6 @@ package classes;
 
 import classes.graph.Vertex;
 import enumerations.FoodState;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import utils.ResourcesUtils;
 
@@ -12,33 +11,32 @@ import utils.ResourcesUtils;
  */
 public class Food extends Vertex{
     private FoodState foodState;
-    private Rectangle body;
+    private Rectangle shape;
     private Integer foodIndex;
 
     public Food(int x, int y){
         super(x, y);
         foodState = FoodState.GOOD;
         foodIndex = ResourcesUtils.getInstance().getRandomFoodIndex();
-        body = new Rectangle(50, 50);
-        body.setFill(ResourcesUtils.getInstance().getGoodFood(foodIndex));
-        body.setX(x);
-        body.setY(y);
-    }
-
-    public FoodState getFoodState() {
-        return foodState;
+        shape = new Rectangle(65, 65);
+        shape.setFill(ResourcesUtils.getInstance().getGoodFood(foodIndex));
+        shape.setX(x);
+        shape.setY(y);
     }
 
     public void setFoodState(FoodState foodState) {
         this.foodState = foodState;
-        body.setFill(ResourcesUtils.getInstance().getBadFood(foodIndex));
+        switch (foodState) {
+            case BAD:
+                shape.setFill(ResourcesUtils.getInstance().getBadFood(foodIndex));
+                break;
+            default:
+                shape.setFill(ResourcesUtils.getInstance().getGoodFood(foodIndex));
+                break;
+        }
     }
 
-    public Rectangle getBody() {
-        return body;
-    }
-
-    public void setBody(Rectangle body) {
-        this.body = body;
+    public Rectangle getShape() {
+        return shape;
     }
 }

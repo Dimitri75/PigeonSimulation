@@ -1,41 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-    <center>
-        <AnchorPane fx:id="bodyPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: rgba(141, 215, 138, 0.67);" onMouseClicked="#putFood" />
-    </center>
-    <bottom>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: rgb(75, 79, 77);" BorderPane.alignment="BOTTOM_CENTER">
-            <children>
-            <Label fx:id="label_error" prefHeight="17.0" textFill="white" alignment="BOTTOM_CENTER">
-               <HBox.margin>
-                  <Insets top="60.0" />
-               </HBox.margin>
-            </Label>
-                <Label fx:id="label_nbPigeons" layoutX="89.0" layoutY="42.0" prefHeight="17.0" prefWidth="107.0" style="-fx-text-fill: white;" text="Nombre de pigeons" wrapText="true" StackPane.alignment="CENTER">
-                   <HBox.margin>
-                      <Insets left="-165.0" right="10.0" />
-                   </HBox.margin>
-                </Label>
-                <TextField fx:id="textField_nbPigeons" onKeyPressed="#onPressEnter" prefHeight="25.0" prefWidth="45.0">
-                    <HBox.margin>
-                        <Insets right="10.0" />
-                    </HBox.margin>
-                </TextField>
-                <Button fx:id="button_nbPigeons" onAction="#nbPigeonsChosen" text="Valider" />
-            </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-        </HBox>
-    </bottom>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <center>
+      <SplitPane dividerPositions="0.8753581661891118" orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
+        <items>
+              <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#putFood" prefHeight="600.0" prefWidth="1200.0" style="-fx-background-color: rgba(141, 215, 138, 0.67);" />
+              <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1200.0" style="-fx-background-color: rgb(75, 79, 77);">
+                  <children>
+                  <Label fx:id="label_error" alignment="BOTTOM_CENTER" prefHeight="20.0" textFill="white">
+ 
+                  </Label>
+                      <Button fx:id="button_start" onAction="#start" onKeyPressed="#onPressEnter" text="Start" />
+                  </children>
+              </HBox>
+        </items>
+      </SplitPane>
+   </center>
 </BorderPane>
