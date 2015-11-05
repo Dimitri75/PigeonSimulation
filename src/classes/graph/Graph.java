@@ -62,15 +62,19 @@ public class Graph {
 			for (int x = 0; x <= width; x += pace){
 				Vertex tmpVertex = addVertex(x, y);
 
-				if (leftVertex != null)
+				if (leftVertex != null) {
 					addEdge(leftVertex, tmpVertex, MovementSpeed.NORMAL);
+					addEdge(tmpVertex, leftVertex, MovementSpeed.NORMAL);
+				}
 				leftVertex = tmpVertex;
 
 				if (y != 0){
 					Vertex upVertex = getVertexByLocation(x, y - pace);
 
-					if (upVertex != null)
+					if (upVertex != null) {
 						addEdge(upVertex, tmpVertex, MovementSpeed.NORMAL);
+						addEdge(tmpVertex, upVertex, MovementSpeed.NORMAL);
+					}
 				}
 			}
 		}
