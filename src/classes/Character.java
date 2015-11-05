@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Dimitri on 21/10/2015.
  */
 
-public class Character extends Element {
+public class Character extends MapElement {
     private int characterImageIndex;
     private List<Vertex> path;
 

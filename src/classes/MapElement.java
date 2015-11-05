@@ -1,6 +1,7 @@
 package classes;
 
 import classes.enumerations.Image;
+import classes.interfaces.Location;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
@@ -8,12 +9,12 @@ import javafx.scene.shape.Rectangle;
 /**
  * Created by Dimitri on 05/11/2015.
  */
-public class Element extends Thread implements Location{
+public class MapElement extends Thread implements Location {
     int x, y;
     private Rectangle shape;
 
 
-    public Element(int x, int y, int shapeSize) {
+    public MapElement(int x, int y, int shapeSize) {
         shape = new Rectangle(shapeSize, shapeSize);
         this.x = x;
         this.y = y;
@@ -22,7 +23,7 @@ public class Element extends Thread implements Location{
         start();
     }
 
-    public Element(int x, int y, int shapeSize, Image image) {
+    public MapElement(int x, int y, int shapeSize, Image image) {
         shape = new Rectangle(shapeSize, shapeSize);
         this.x = x;
         this.y = y;

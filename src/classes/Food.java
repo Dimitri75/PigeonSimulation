@@ -7,7 +7,7 @@ import classes.utils.ResourcesUtils;
 /**
  * Created by Dimitri on 21/10/2015.
  */
-public class Food extends Element {
+public class Food extends MapElement {
     private int foodImageIndex;
     private FoodState foodState;
 

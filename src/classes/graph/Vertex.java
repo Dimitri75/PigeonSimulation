@@ -1,6 +1,6 @@
 package classes.graph;
 
-import classes.Location;
+import classes.interfaces.Location;
 
 import java.util.ArrayList;
 
