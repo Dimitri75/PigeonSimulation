@@ -6,14 +6,14 @@ import java.util.*;
  * Created by Dimitri on 01/11/2015.
  */
 public class CircularQueue<T> extends LinkedList<T>{
-    protected Integer fixedSize;
+    protected int fixedSize;
 
     public CircularQueue(int size){
         super();
         this.fixedSize = size;
     }
 
-    public Integer getFixedSize(){
+    public int getFixedSize(){
         return fixedSize;
     }
 

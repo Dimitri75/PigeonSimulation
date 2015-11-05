@@ -4,9 +4,9 @@ package classes;
  * Created by Dimitri on 21/10/2015.
  */
 public interface Location {
-    Integer getX();
+    int getX();
     void setX(int x);
 
-    Integer getY();
+    int getY();
     void setY(int y);
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Dimitri on 21/10/2015.
  */
 public class Vertex implements Location, Comparable<Vertex> {
-	Integer x, y;
+	int x, y;
 	private Vertex previous;
 	private double minDistance = Double.POSITIVE_INFINITY;
 	private ArrayList<Edge> adjacencies;
@@ -45,7 +45,7 @@ public class Vertex implements Location, Comparable<Vertex> {
 	}
 
 	@Override
-	public Integer getX() {
+	public int getX() {
 		return x;
 	}
 
@@ -55,7 +55,7 @@ public class Vertex implements Location, Comparable<Vertex> {
 	}
 
 	@Override
-	public Integer getY() {
+	public int getY() {
 		return y;
 	}
 

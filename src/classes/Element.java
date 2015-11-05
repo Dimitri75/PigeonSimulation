@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
  * Created by Dimitri on 05/11/2015.
  */
 public class Element extends Thread implements Location{
-    Integer x, y;
+    int x, y;
     private Rectangle shape;
 
 
@@ -37,7 +37,7 @@ public class Element extends Thread implements Location{
     }
 
     @Override
-    public Integer getX() {
+    public int getX() {
         return x;
     }
 
@@ -48,7 +48,7 @@ public class Element extends Thread implements Location{
     }
 
     @Override
-    public Integer getY() {
+    public int getY() {
         return y;
     }
 

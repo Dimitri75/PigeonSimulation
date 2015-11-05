@@ -11,13 +11,13 @@ import java.util.PriorityQueue;
  * Created by Dimitri on 21/10/2015.
  */
 public class Graph {
-	private Integer pace;
-	private Integer width;
-	private Integer height;
+	private int pace;
+	private int width;
+	private int height;
 	private List<Vertex> listVertex;
 	private List<Edge> listEdges;
 
-	public Graph(Integer width, Integer height, Integer pace) {
+	public Graph(int width, int height, int pace) {
 		this.width = width;
 		this.height = height;
 		this.pace = pace;
@@ -42,7 +42,7 @@ public class Graph {
 		return edge;
 	}
 
-	public Vertex addVertex(Integer x, Integer y) {
+	public Vertex addVertex(int x, int y) {
 		Vertex vertex = new Vertex(x, y);
 		listVertex.add(vertex);
 		return vertex;

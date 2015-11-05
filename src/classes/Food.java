@@ -8,11 +8,12 @@ import classes.utils.ResourcesUtils;
  * Created by Dimitri on 21/10/2015.
  */
 public class Food extends Element {
-    private Integer foodImageIndex;
+    private int foodImageIndex;
     private FoodState foodState;
 
     public Food(int x, int y){
         super(x, y, 50);
+        foodState = FoodState.GOOD;
         foodImageIndex = ResourcesUtils.getInstance().getRandomFoodIndex();
         getShape().setFill(ResourcesUtils.getInstance().getGoodFood(foodImageIndex));
     }

@@ -4,7 +4,6 @@ import classes.graph.Graph;
 import classes.graph.Vertex;
 
 import classes.enumerations.Image;
-import javafx.scene.paint.ImagePattern;
 
 import classes.utils.ResourcesUtils;
 
@@ -15,7 +14,7 @@ import java.util.List;
  */
 
 public class Character extends Element {
-    private Integer characterImageIndex;
+    private int characterImageIndex;
     private List<Vertex> path;
 
 
@@ -32,9 +31,7 @@ public class Character extends Element {
     public void runPath(Graph graph, Vertex start, Vertex destination){
         if (path != null)
             path.clear();
-
         path = graph.dijkstra(start, destination);
-
 
         for (Vertex v : path){
             setX(v.getX());
