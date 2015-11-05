@@ -25,6 +25,7 @@ public class Edge {
 			this.weight = 1;
 			break;
 		}
+
 		source.getAdjacencies().add(this);
 		target.getAdjacencies().add(this);
 	}

@@ -1,49 +1,49 @@
 package classes;
 
-import classes.graph.Location;
-import javafx.scene.shape.Rectangle;
+import classes.graph.Graph;
+import classes.graph.Vertex;
 
 import classes.enumerations.Image;
 import javafx.scene.paint.ImagePattern;
 
 import classes.utils.ResourcesUtils;
 
+import java.util.List;
+
 /**
  * Created by Dimitri on 21/10/2015.
  */
 
-public class Character extends Location implements Runnable{
-    private Integer characterIndex;
-    private Rectangle shape;
+public class Character extends Element {
+    private Integer characterImageIndex;
+    private List<Vertex> path;
+
 
     public Character(int x, int y) {
-        super(x, y);
-        characterIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
-        shape = new Rectangle(70, 70);
-        shape.setFill(ResourcesUtils.getInstance().getBird(characterIndex));
-        shape.setX(x);
-        shape.setY(y);
+        super(x, y, 70);
+        characterImageIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
+        getShape().setFill(ResourcesUtils.getInstance().getBird(characterImageIndex));
     }
 
     public Character(int x, int y, Image image) {
-        shape = new Rectangle(70, 70);
-        shape.setFill(new ImagePattern(new javafx.scene.image.Image(image.toString())));
-        shape.setX(x);
-        shape.setY(y);
+        super(x, y, 70, image);
     }
 
-    public Rectangle getShape() {
-        return shape;
-    }
+    public void runPath(Graph graph, Vertex start, Vertex destination){
+        if (path != null)
+            path.clear();
 
-    public void foodSeen(int x, int y){
-        shape.setX(x);
-        shape.setY(y);
-        shape.setTranslateX(10);
-    }
+        path = graph.dijkstra(start, destination);
 
-    @Override
-    public void run() {
 
+        for (Vertex v : path){
+            setX(v.getX());
+            setY(v.getY());
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

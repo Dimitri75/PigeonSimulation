@@ -1,6 +1,7 @@
 package sample;
 
 import classes.graph.Graph;
+import classes.graph.Vertex;
 import classes.list.CircularQueue;
 import javafx.scene.layout.AnchorPane;
 
@@ -49,19 +50,19 @@ public class Controller {
                 switch (event.getCode()) {
                     case UP:
                         if (y - PACE >= 0)
-                            child.getShape().setY(y - PACE);
+                            child.setY((int) y - PACE);
                         break;
                     case DOWN:
                         if (y + PACE + child.getShape().getHeight() <= anchorPane.getPrefHeight())
-                            child.getShape().setY(y + PACE);
+                            child.setY((int) y + PACE);
                         break;
                     case LEFT:
                         if (x - PACE >= 0)
-                            child.getShape().setX(x - PACE);
+                            child.setX((int) x - PACE);
                         break;
                     case RIGHT:
                         if (x + PACE + child.getShape().getWidth() <= anchorPane.getPrefWidth())
-                            child.getShape().setX(x + PACE);
+                            child.setX((int) x + PACE);
                         break;
                 }
             });
@@ -85,8 +86,8 @@ public class Controller {
                     randX -= randX % PACE - 2*PACE;
                     randY -= randY % PACE - 2*PACE;
                 }
-                character.getShape().setX(randX);
-                character.getShape().setY(randY);
+                character.setX(randX);
+                character.setY(randY);
 
 
                 anchorPane.getChildren().add(character.getShape());
@@ -104,9 +105,9 @@ public class Controller {
     @FXML
     public void start() {
         clearAll();
-        initGraph();
         initPigeons();
         initChild();
+        initGraph();
         started = true;
     }
 
@@ -151,6 +152,17 @@ public class Controller {
             Food excedent = foodCircularQueue.pushAndPopExcedent(food);
             if (excedent != null)
                 anchorPane.getChildren().remove(excedent.getShape());
+        }
+
+        testMovement();
+    }
+
+    public void testMovement(){
+        for (Character pigeon : pigeonsList) {
+            Vertex destination = graph.getVertexByLocation(foodCircularQueue.peek().getX(), foodCircularQueue.peek().getY());
+            Vertex start = graph.getVertexByLocation(pigeon.getX(), pigeon.getY());
+
+            pigeon.runPath(graph, start, destination);
         }
     }
 }

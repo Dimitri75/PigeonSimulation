@@ -48,7 +48,7 @@ public class Graph {
 		return vertex;
 	}
 
-	public Vertex getVertexByLocation(Integer x, Integer y){
+	public Vertex getVertexByLocation(int x, int y){
 		for (Vertex vertex : listVertex)
 			if (vertex.getX() == x && vertex.getY() == y)
 				return vertex;
@@ -58,18 +58,21 @@ public class Graph {
 
 	public void init(){
 		for (int y = 0; y <= height; y += pace){
-
 			Vertex leftVertex = null;
 			for (int x = 0; x <= width; x += pace){
 				Vertex tmpVertex = addVertex(x, y);
 
 				if (leftVertex != null)
-					addEdge(tmpVertex, leftVertex, MovementSpeed.NORMAL);
+					addEdge(leftVertex, tmpVertex, MovementSpeed.NORMAL);
 				leftVertex = tmpVertex;
 
 				if (y != 0){
 					Vertex upVertex = getVertexByLocation(x, y - pace);
-					addEdge(tmpVertex, upVertex, MovementSpeed.NORMAL);
+
+					if (upVertex != null)
+						addEdge(upVertex, tmpVertex, MovementSpeed.NORMAL);
+					else
+						System.out.println("What the fuck ?");
 				}
 			}
 		}

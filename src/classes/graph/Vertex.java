@@ -1,21 +1,21 @@
 package classes.graph;
 
+import classes.Location;
+
 import java.util.ArrayList;
 
 /**
  * Created by Dimitri on 21/10/2015.
  */
-public class Vertex extends Location implements Comparable<Vertex> {
+public class Vertex implements Location, Comparable<Vertex> {
+	Integer x, y;
 	private Vertex previous;
 	private double minDistance = Double.POSITIVE_INFINITY;
 	private ArrayList<Edge> adjacencies;
 
-	public Vertex(){
-
-	}
-
 	public Vertex(int x, int y) {
-		super(x, y);
+		this.x = x;
+		this.y = y;
 		adjacencies = new ArrayList<Edge>();
 	}
 
@@ -40,7 +40,27 @@ public class Vertex extends Location implements Comparable<Vertex> {
 	}
 
 	@Override
-	public int compareTo(Vertex vertex) {
+    public int compareTo(Vertex vertex) {
 		return Double.compare(minDistance, vertex.minDistance);
+	}
+
+	@Override
+	public Integer getX() {
+		return x;
+	}
+
+	@Override
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	@Override
+	public Integer getY() {
+		return y;
+	}
+
+	@Override
+	public void setY(int y) {
+		this.y = y;
 	}
 }
