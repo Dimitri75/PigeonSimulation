@@ -71,8 +71,6 @@ public class Graph {
 
 					if (upVertex != null)
 						addEdge(upVertex, tmpVertex, MovementSpeed.NORMAL);
-					else
-						System.out.println("What the fuck ?");
 				}
 			}
 		}

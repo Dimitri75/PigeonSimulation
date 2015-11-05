@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * Created by Dimitri on 21/10/2015.
  */
-
 public class Character extends MapElement {
     private int characterImageIndex;
     private List<Vertex> path;
@@ -32,14 +31,14 @@ public class Character extends MapElement {
         if (path != null)
             path.clear();
         path = graph.dijkstra(start, destination);
+        run();
+    }
 
-        for (Vertex v : path){
-            setX(v.getX());
-            setY(v.getY());
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    public void run() {
+        if (path != null){
+            for (Vertex v : path){
+                setX(v.getX());
+                setY(v.getY());
             }
         }
     }

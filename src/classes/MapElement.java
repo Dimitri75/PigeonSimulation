@@ -5,14 +5,12 @@ import classes.interfaces.Location;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-
 /**
  * Created by Dimitri on 05/11/2015.
  */
-public class MapElement extends Thread implements Location {
+public class MapElement implements Location {
     int x, y;
     private Rectangle shape;
-
 
     public MapElement(int x, int y, int shapeSize) {
         shape = new Rectangle(shapeSize, shapeSize);
@@ -20,7 +18,6 @@ public class MapElement extends Thread implements Location {
         this.y = y;
         shape.setX(x);
         shape.setY(y);
-        start();
     }
 
     public MapElement(int x, int y, int shapeSize, Image image) {
@@ -30,7 +27,6 @@ public class MapElement extends Thread implements Location {
         shape.setX(x);
         shape.setY(y);
         getShape().setFill(new ImagePattern(new javafx.scene.image.Image(image.toString())));
-        start();
     }
 
     public Rectangle getShape() {
