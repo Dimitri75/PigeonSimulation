@@ -16,11 +16,10 @@ public class Character extends MapElement implements Runnable {
     private int characterImageIndex;
     private Position position;
     private List<Vertex> path;
-    private boolean actionDone;
+    private static boolean actionDone = false;
 
     public Character(int x, int y, int shapeSize) {
         super(x, y, shapeSize);
-        actionDone = false;
         characterImageIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
 
         position = Position.LEFT;
