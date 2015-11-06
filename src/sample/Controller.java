@@ -28,8 +28,7 @@ public class Controller {
     @FXML
     private AnchorPane anchorPane;
 
-    private final static Integer PACE = 20;
-    private final static Integer NB_PIGEONS = 20;
+    private final static Integer PACE = 40;
 
     private Boolean started = false;
     private Graph graph;
@@ -78,11 +77,24 @@ public class Controller {
 
     public void initObstacles() {
         MapElement obstacle;
-        for (int x = 3*PACE; x < anchorPane.getPrefWidth(); x *= 2) {
-            for (int y = 3*PACE; y < 28*PACE; y += PACE) {
-                obstacle = new MapElement(x, y, PACE, Image.OBSTACLE);
-                anchorPane.getChildren().add(obstacle.getShape());
-                obstaclesList.add(obstacle);
+        int maxX = (int) (anchorPane.getPrefWidth() / PACE);
+        int maxY = (int) (anchorPane.getPrefHeight() / PACE) - 1;
+        for (int x = 2; x < maxX; x *= 2) {
+            for (int y = 3; y < maxY; y++) {
+                if (y % x != 0) {
+                    obstacle = new MapElement(x * PACE, y * PACE, PACE, Image.OBSTACLE);
+                    anchorPane.getChildren().add(obstacle.getShape());
+                    obstaclesList.add(obstacle);
+                }
+            }
+        }
+        for (int y = 2; y < maxY; y*=2) {
+            for (int x = 3; x < maxX; x++) {
+                if (x % 5 == 0 || x % 5 == 1) {
+                    obstacle = new MapElement(x * PACE, y * PACE, PACE, Image.OBSTACLE);
+                    anchorPane.getChildren().add(obstacle.getShape());
+                    obstaclesList.add(obstacle);
+                }
             }
         }
     }
@@ -91,7 +103,8 @@ public class Controller {
         try {
             Random random = new Random();
             Character character;
-            for (int i = 0; i < NB_PIGEONS; i++) {
+            int nbPigeons = (int) (anchorPane.getPrefHeight() / PACE);
+            for (int i = 0; i < nbPigeons; i++) {
                 character = new Character(0, 0, PACE);
 
                 int randX = -1;
