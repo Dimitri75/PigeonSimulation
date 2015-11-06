@@ -31,7 +31,6 @@ public class Character extends MapElement implements Runnable {
         if (path != null)
             path.clear();
         path = graph.dijkstra(start, destination);
-        //run();
     }
 
     @Override
@@ -42,24 +41,17 @@ public class Character extends MapElement implements Runnable {
                 while (vertexIterator.hasNext()) {
                     Vertex v = vertexIterator.next();
 
-                    Thread.sleep(70);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
+                    Platform.runLater(() -> {
                             setX(v.getX());
                             setY(v.getY());
-                        }
                     });
+
+                    Thread.sleep(70);
                 }
             }
         } catch (Exception e) {
 
         }
-    }
-
-    public List<Vertex> getPath() {
-        return path;
     }
 
 }
