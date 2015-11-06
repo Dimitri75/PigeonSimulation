@@ -156,19 +156,21 @@ public class Controller {
                 anchorPane.getChildren().remove(excedent.getShape());
         }
         stopMovement();
-        testMovement();
+        startMovement();
     }
 
-    public void testMovement() {
+    public void startMovement() {
         try {
             for (Character pigeon : pigeonsList) {
                 Vertex destination = graph.getVertexByLocation(foodCircularQueue.peek().getX(), foodCircularQueue.peek().getY());
                 Vertex start = graph.getVertexByLocation(pigeon.getX(), pigeon.getY());
 
-                pigeon.runPath(graph, start, destination);
-                Thread t = new Thread(pigeon);
-                t.start();
-                pigeonThreads.add(t);
+                pigeon.initPath(graph, start, destination);
+
+                Thread thread = new Thread(pigeon);
+                thread.start();
+
+                pigeonThreads.add(thread);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,9 +179,9 @@ public class Controller {
 
     public void stopMovement() {
         if (!pigeonThreads.isEmpty()) {
-            for (int i = 0; i < pigeonThreads.size(); i++) {
-                pigeonThreads.get(i).interrupt();
-            }
+            for (Thread thread : pigeonThreads)
+                thread.interrupt();
+
             pigeonThreads.clear();
         }
     }

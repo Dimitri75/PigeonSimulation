@@ -7,7 +7,6 @@ import classes.graph.Vertex;
 import classes.utils.ResourcesUtils;
 import javafx.application.Platform;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -17,6 +16,7 @@ public class Character extends MapElement implements Runnable {
     private int characterImageIndex;
     private Position position;
     private List<Vertex> path;
+    private Boolean done;
 
 
     public Character(int x, int y) {
@@ -44,36 +44,39 @@ public class Character extends MapElement implements Runnable {
         }
     }
 
-    public void runPath(Graph graph, Vertex start, Vertex destination) {
+    public void initPath(Graph graph, Vertex start, Vertex destination) {
         if (path != null)
             path.clear();
         path = graph.dijkstra(start, destination);
     }
 
+    public Boolean getDone() {
+        return done;
+    }
+
     @Override
     public void run() {
         if (path != null) {
-            Iterator<Vertex> vertexIterator = path.iterator();
-            while(vertexIterator.hasNext()){
-                Vertex v = vertexIterator.next();
-                if (v.getX() < x && position.equals(Position.RIGHT)) {
+            for (Vertex vertex : path){
+                if (vertex.getX() < x && position.equals(Position.RIGHT)) {
                     changePosition();
-                } else if (v.getX() > x && position.equals(Position.LEFT)) {
+                } else if (vertex.getX() > x && position.equals(Position.LEFT)) {
                     changePosition();
                 }
-
-                Platform.runLater(() -> {
-                    setX(v.getX());
-                    setY(v.getY());
-                });
 
                 try {
                     Thread.sleep(25);
-                } catch (InterruptedException e) {
+                }catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
                 }
+
+                Platform.runLater(() -> {
+                    setX(vertex.getX());
+                    setY(vertex.getY());
+                });
             }
+            done = true;
         }
     }
 }
