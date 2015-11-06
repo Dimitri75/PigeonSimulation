@@ -155,6 +155,9 @@ public class Controller {
             if (excedent != null)
                 anchorPane.getChildren().remove(excedent.getShape());
         }
+
+        initFoodChasing();
+
         stopMovement();
         testMovement();
     }
@@ -183,5 +186,12 @@ public class Controller {
             pigeonThreads.clear();
         }
     }
+
+    public void initFoodChasing(){
+        for (Character p : pigeonsList){
+            p.FOOD_EATEN = false;
+        }
+    }
+
 }
 

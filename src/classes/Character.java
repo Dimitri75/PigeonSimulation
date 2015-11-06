@@ -18,6 +18,8 @@ public class Character extends MapElement implements Runnable {
     private Position position;
     private List<Vertex> path;
 
+    public static boolean FOOD_EATEN = false;
+
 
     public Character(int x, int y) {
         super(x, y, 70);
@@ -56,24 +58,30 @@ public class Character extends MapElement implements Runnable {
             Iterator<Vertex> vertexIterator = path.iterator();
             while(vertexIterator.hasNext()){
                 Vertex v = vertexIterator.next();
-                if (v.getX() < x && position.equals(Position.RIGHT)) {
-                    changePosition();
-                } else if (v.getX() > x && position.equals(Position.LEFT)) {
-                    changePosition();
-                }
+                if(!FOOD_EATEN) {
+                    if (v.getX() < x && position.equals(Position.RIGHT)) {
+                        changePosition();
+                    } else if (v.getX() > x && position.equals(Position.LEFT)) {
+                        changePosition();
+                    }
 
-                Platform.runLater(() -> {
-                    setX(v.getX());
-                    setY(v.getY());
-                });
+                    Platform.runLater(() -> {
+                        setX(v.getX());
+                        setY(v.getY());
+                    });
 
-                try {
-                    Thread.sleep(25);
-                } catch (InterruptedException e) {
+                    try {
+                        Thread.sleep(25);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }else{
                     Thread.currentThread().interrupt();
                     break;
                 }
             }
+            FOOD_EATEN = true;
         }
     }
 }
