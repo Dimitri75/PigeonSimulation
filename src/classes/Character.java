@@ -1,18 +1,18 @@
 package classes;
 
+import classes.enumerations.Image;
 import classes.graph.Graph;
 import classes.graph.Vertex;
-
-import classes.enumerations.Image;
-
 import classes.utils.ResourcesUtils;
+import javafx.application.Platform;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by Dimitri on 21/10/2015.
  */
-public class Character extends MapElement {
+public class Character extends MapElement implements Runnable {
     private int characterImageIndex;
     private List<Vertex> path;
 
@@ -27,19 +27,39 @@ public class Character extends MapElement {
         super(x, y, 70, image);
     }
 
-    public void runPath(Graph graph, Vertex start, Vertex destination){
+    public void runPath(Graph graph, Vertex start, Vertex destination) {
         if (path != null)
             path.clear();
         path = graph.dijkstra(start, destination);
-        run();
+        //run();
     }
 
+    @Override
     public void run() {
-        if (path != null){
-            for (Vertex v : path){
-                setX(v.getX());
-                setY(v.getY());
+        try {
+            if (path != null) {
+                Iterator<Vertex> vertexIterator = path.iterator();
+                while (vertexIterator.hasNext()) {
+                    Vertex v = vertexIterator.next();
+
+                    Thread.sleep(70);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            setX(v.getX());
+                            setY(v.getY());
+                        }
+                    });
+                }
             }
+        } catch (Exception e) {
+
         }
     }
+
+    public List<Vertex> getPath() {
+        return path;
+    }
+
 }

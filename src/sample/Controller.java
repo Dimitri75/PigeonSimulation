@@ -1,21 +1,22 @@
 package sample;
 
+import classes.Character;
+import classes.Food;
+import classes.enumerations.FoodState;
+import classes.enumerations.Image;
 import classes.graph.Graph;
 import classes.graph.Vertex;
 import classes.list.CircularQueue;
-import javafx.scene.layout.AnchorPane;
-
-import classes.Food;
-import classes.Character;
-import classes.enumerations.FoodState;
-import classes.enumerations.Image;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Controller {
     @FXML
@@ -38,7 +39,7 @@ public class Controller {
 
     }
 
-    public void initChild(){
+    public void initChild() {
         child = new Character(0, 0, Image.CHILD);
         anchorPane.getChildren().add(child.getShape());
 
@@ -69,7 +70,7 @@ public class Controller {
         }
     }
 
-    public void initPigeons(){
+    public void initPigeons() {
         try {
             Random random = new Random();
             Character character;
@@ -79,12 +80,12 @@ public class Controller {
                 int randX = Integer.MAX_VALUE;
                 int randY = Integer.MAX_VALUE;
                 while (randX + character.getShape().getWidth() > anchorPane.getWidth() ||
-                        randY + character.getShape().getHeight() > anchorPane.getHeight()){
+                        randY + character.getShape().getHeight() > anchorPane.getHeight()) {
                     randX = random.nextInt((int) anchorPane.getWidth());
                     randY = random.nextInt((int) anchorPane.getHeight());
 
-                    randX -= randX % PACE - 2*PACE;
-                    randY -= randY % PACE - 2*PACE;
+                    randX -= randX % PACE - 2 * PACE;
+                    randY -= randY % PACE - 2 * PACE;
                 }
                 character.setX(randX);
                 character.setY(randY);
@@ -98,8 +99,8 @@ public class Controller {
         }
     }
 
-    public void initGraph(){
-        graph = new Graph((int)anchorPane.getWidth(), (int)anchorPane.getHeight(), PACE);   // TODO : vérifier ce qui est généré
+    public void initGraph() {
+        graph = new Graph((int) anchorPane.getWidth(), (int) anchorPane.getHeight(), PACE);   // TODO : vérifier ce qui est généré
     }
 
     @FXML
@@ -119,7 +120,7 @@ public class Controller {
         }
     }
 
-    public void clearAll(){
+    public void clearAll() {
         label_error.setText("");
 
         for (Character character : pigeonsList)
@@ -143,8 +144,8 @@ public class Controller {
                 foodCircularQueue.peek().setFoodState(FoodState.BAD);
             }
 
-            int x = ((int) e.getSceneX()) - (((int) e.getSceneX()) % PACE) - 2*PACE;
-            int y = ((int) e.getSceneY()) - (((int) e.getSceneY()) % PACE) - 2*PACE;
+            int x = ((int) e.getSceneX()) - (((int) e.getSceneX()) % PACE) - 2 * PACE;
+            int y = ((int) e.getSceneY()) - (((int) e.getSceneY()) % PACE) - 2 * PACE;
 
             Food food = new Food(x, y);
             anchorPane.getChildren().add(food.getShape());
@@ -157,12 +158,18 @@ public class Controller {
         testMovement();
     }
 
-    public void testMovement(){
-        for (Character pigeon : pigeonsList) {
-            Vertex destination = graph.getVertexByLocation(foodCircularQueue.peek().getX(), foodCircularQueue.peek().getY());
-            Vertex start = graph.getVertexByLocation(pigeon.getX(), pigeon.getY());
+    public void testMovement() {
+        try {
+            for (Character pigeon : pigeonsList) {
+                Vertex destination = graph.getVertexByLocation(foodCircularQueue.peek().getX(), foodCircularQueue.peek().getY());
+                Vertex start = graph.getVertexByLocation(pigeon.getX(), pigeon.getY());
 
-            pigeon.runPath(graph, start, destination);
+                pigeon.runPath(graph, start, destination);
+                Thread t = new Thread(pigeon);
+                t.start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
