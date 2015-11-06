@@ -11,8 +11,8 @@ public class Food extends MapElement {
     private int foodImageIndex;
     private FoodState foodState;
 
-    public Food(int x, int y){
-        super(x, y, 50);
+    public Food(int x, int y, int shapeSize){
+        super(x, y, shapeSize);
         foodState = FoodState.GOOD;
         foodImageIndex = ResourcesUtils.getInstance().getRandomFoodIndex();
         getShape().setFill(ResourcesUtils.getInstance().getGoodFood(foodImageIndex));

@@ -1,5 +1,6 @@
 package classes.graph;
 
+import classes.MapElement;
 import classes.enumerations.MovementSpeed;
 
 import java.util.ArrayList;
@@ -11,113 +12,124 @@ import java.util.PriorityQueue;
  * Created by Dimitri on 21/10/2015.
  */
 public class Graph {
-	private int pace;
-	private int width;
-	private int height;
-	private List<Vertex> listVertex;
-	private List<Edge> listEdges;
+    private int pace;
+    private int width;
+    private int height;
+    private List<Vertex> listVertex;
+    private List<MapElement> obstaclesList;
+    private List<Edge> listEdges;
 
-	public Graph(int width, int height, int pace) {
-		this.width = width;
-		this.height = height;
-		this.pace = pace;
+    public Graph(int width, int height, List<MapElement> obstaclesList, int pace) {
+        this.width = width;
+        this.height = height;
+        this.obstaclesList = obstaclesList;
+        this.pace = pace;
 
-		listVertex = new ArrayList<>();
-		listEdges = new ArrayList<>();
+        listVertex = new ArrayList<>();
+        listEdges = new ArrayList<>();
 
-		init();
-	}
+        init();
+    }
 
-	public List<Vertex> getListVertex() {
-		return listVertex;
-	}
+    public List<Vertex> getListVertex() {
+        return listVertex;
+    }
 
-	public List<Edge> getListEdges() {
-		return listEdges;
-	}
+    public List<Edge> getListEdges() {
+        return listEdges;
+    }
 
-	public Edge addEdge(Vertex source, Vertex target, MovementSpeed movementSpeed) {
-		Edge edge = new Edge(source, target, movementSpeed);
-		listEdges.add(edge);
-		return edge;
-	}
+    public Edge addEdge(Vertex source, Vertex target, MovementSpeed movementSpeed) {
+        Edge edge = new Edge(source, target, movementSpeed);
+        listEdges.add(edge);
+        return edge;
+    }
 
-	public Vertex addVertex(int x, int y) {
-		Vertex vertex = new Vertex(x, y);
-		listVertex.add(vertex);
-		return vertex;
-	}
+    public Vertex addVertex(int x, int y) {
+        Vertex vertex = new Vertex(x, y);
+        listVertex.add(vertex);
+        return vertex;
+    }
 
-	public Vertex getVertexByLocation(int x, int y){
-		for (Vertex vertex : listVertex)
-			if (vertex.getX() == x && vertex.getY() == y)
-				return vertex;
+    public Vertex getVertexByLocation(int x, int y) {
+        for (Vertex vertex : listVertex)
+            if (vertex.getX() == x && vertex.getY() == y)
+                return vertex;
 
-		return null;
-	}
+        return null;
+    }
 
-	public void init(){
-		for (int y = 0; y <= height; y += pace){
-			Vertex leftVertex = null;
-			for (int x = 0; x <= width; x += pace){
-				Vertex tmpVertex = addVertex(x, y);
+    public void init() {
+        boolean noObstacles = true;
+        for (int y = 0; y <= height; y += pace) {
+            Vertex leftVertex = null;
+            for (int x = 0; x <= width; x += pace) {
+                noObstacles = true;
+                for (MapElement obstacle : obstaclesList)
+                    if (obstacle.getX() == x && obstacle.getY() == y)
+                        noObstacles = false;
 
-				if (leftVertex != null) {
-					addEdge(leftVertex, tmpVertex, MovementSpeed.NORMAL);
-					addEdge(tmpVertex, leftVertex, MovementSpeed.NORMAL);
-				}
-				leftVertex = tmpVertex;
+                Vertex tmpVertex = null;
+                if (noObstacles) {
+                    tmpVertex = addVertex(x, y);
 
-				if (y != 0){
-					Vertex upVertex = getVertexByLocation(x, y - pace);
+                    if (leftVertex != null) {
+                        addEdge(leftVertex, tmpVertex, MovementSpeed.NORMAL);
+                        addEdge(tmpVertex, leftVertex, MovementSpeed.NORMAL);
+                    }
 
-					if (upVertex != null) {
-						addEdge(upVertex, tmpVertex, MovementSpeed.NORMAL);
-						addEdge(tmpVertex, upVertex, MovementSpeed.NORMAL);
-					}
-				}
-			}
-		}
-	}
+                    if (y != 0) {
+                        Vertex upVertex = getVertexByLocation(x, y - pace);
 
-	public List<Vertex> dijkstra(Vertex start, Vertex destination) {
-		// ReinitVertex
-		for (Vertex vertex : listVertex) {
-			vertex.setMinDistance(Double.POSITIVE_INFINITY);
-			vertex.setPrevious(null);
-		}
+                        if (upVertex != null) {
+                            addEdge(upVertex, tmpVertex, MovementSpeed.NORMAL);
+                            addEdge(tmpVertex, upVertex, MovementSpeed.NORMAL);
+                        }
+                    }
+                }
+                leftVertex = tmpVertex;
+            }
+        }
+    }
 
-		// ComputePaths
-		start.setMinDistance(0.);
-		PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
-		vertexQueue.add(start);
+    public List<Vertex> dijkstra(Vertex start, Vertex destination) {
+        // ReinitVertex
+        for (Vertex vertex : listVertex) {
+            vertex.setMinDistance(Double.POSITIVE_INFINITY);
+            vertex.setPrevious(null);
+        }
 
-		while (!vertexQueue.isEmpty()) {
-			Vertex current = vertexQueue.poll();
+        // ComputePaths
+        start.setMinDistance(0.);
+        PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
+        vertexQueue.add(start);
 
-			for (Edge e : current.getAdjacencies()) {
-				Vertex targetVertex = e.getTarget();
-				double weight = e.getWeight();
-				double distanceThroughCurrent = current.getMinDistance()
-						+ weight;
-				if (distanceThroughCurrent < targetVertex.getMinDistance()) {
-					vertexQueue.remove(targetVertex);
-					targetVertex.setMinDistance(distanceThroughCurrent);
-					targetVertex.setPrevious(current);
-					vertexQueue.add(targetVertex);
-				}
-			}
-		}
-		vertexQueue.clear();
+        while (!vertexQueue.isEmpty()) {
+            Vertex current = vertexQueue.poll();
 
-		// GetShortestPath
-		List<Vertex> path = new ArrayList<Vertex>();
-		for (Vertex vertex = destination; vertex != null; vertex = vertex
-				.getPrevious())
-			path.add(vertex);
+            for (Edge e : current.getAdjacencies()) {
+                Vertex targetVertex = e.getTarget();
+                double weight = e.getWeight();
+                double distanceThroughCurrent = current.getMinDistance()
+                        + weight;
+                if (distanceThroughCurrent < targetVertex.getMinDistance()) {
+                    vertexQueue.remove(targetVertex);
+                    targetVertex.setMinDistance(distanceThroughCurrent);
+                    targetVertex.setPrevious(current);
+                    vertexQueue.add(targetVertex);
+                }
+            }
+        }
+        vertexQueue.clear();
 
-		Collections.reverse(path);
+        // GetShortestPath
+        List<Vertex> path = new ArrayList<Vertex>();
+        for (Vertex vertex = destination; vertex != null; vertex = vertex
+                .getPrevious())
+            path.add(vertex);
 
-		return path;
-	}
+        Collections.reverse(path);
+
+        return path;
+    }
 }

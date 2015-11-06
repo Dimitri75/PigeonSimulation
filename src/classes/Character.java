@@ -18,8 +18,8 @@ public class Character extends MapElement implements Runnable {
     private List<Vertex> path;
     private boolean actionDone;
 
-    public Character(int x, int y) {
-        super(x, y, 70);
+    public Character(int x, int y, int shapeSize) {
+        super(x, y, shapeSize);
         actionDone = false;
         characterImageIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
 
@@ -30,8 +30,8 @@ public class Character extends MapElement implements Runnable {
         getShape().setFill(ResourcesUtils.getInstance().getBird(characterImageIndex, position));
     }
 
-    public Character(int x, int y, Image image) {
-        super(x, y, 70, image);
+    public Character(int x, int y, int shapeSize, Image image) {
+        super(x, y, shapeSize, image);
     }
 
     public void changePosition() {
@@ -71,7 +71,7 @@ public class Character extends MapElement implements Runnable {
                     }
 
                     try {
-                        Thread.sleep(25);
+                        Thread.sleep(75);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         break;
