@@ -16,11 +16,11 @@ public class Character extends MapElement implements Runnable {
     private int characterImageIndex;
     private Position position;
     private List<Vertex> path;
-    private boolean actionDone;
+    private static boolean ACTION_DONE;
 
     public Character(int x, int y, int shapeSize) {
         super(x, y, shapeSize);
-        actionDone = false;
+        ACTION_DONE = false;
         characterImageIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
 
         position = Position.LEFT;
@@ -50,20 +50,12 @@ public class Character extends MapElement implements Runnable {
         path = graph.dijkstra(start, destination);
     }
 
-    public void setActionDone(boolean actionDone) {
-        this.actionDone = actionDone;
-    }
-
-    public Boolean getActionDone() {
-        return actionDone;
-    }
-
     @Override
     public void run() {
         if (path != null) {
-            actionDone = false;
+            ACTION_DONE = false;
             for (Vertex vertex : path) {
-                if (!actionDone) {
+                if (!ACTION_DONE) {
                     if (vertex.getX() < x && position.equals(Position.RIGHT)) {
                         changePosition();
                     } else if (vertex.getX() > x && position.equals(Position.LEFT)) {
@@ -83,7 +75,7 @@ public class Character extends MapElement implements Runnable {
                     });
                 }
             }
-            actionDone = true;
+            ACTION_DONE = true;
         }
     }
 }
