@@ -16,11 +16,11 @@ public class Character extends MapElement implements Runnable {
     private int characterImageIndex;
     private Position position;
     private List<Vertex> path;
-    private Boolean done;
-
+    private boolean actionDone;
 
     public Character(int x, int y) {
         super(x, y, 70);
+        actionDone = false;
         characterImageIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
 
         position = Position.LEFT;
@@ -50,33 +50,42 @@ public class Character extends MapElement implements Runnable {
         path = graph.dijkstra(start, destination);
     }
 
-    public Boolean getDone() {
-        return done;
+    public void setActionDone(boolean actionDone) {
+        this.actionDone = actionDone;
+    }
+
+    public Boolean getActionDone() {
+        return actionDone;
     }
 
     @Override
     public void run() {
         if (path != null) {
-            for (Vertex vertex : path){
-                if (vertex.getX() < x && position.equals(Position.RIGHT)) {
-                    changePosition();
-                } else if (vertex.getX() > x && position.equals(Position.LEFT)) {
-                    changePosition();
-                }
+            actionDone = false;
+            for (Vertex vertex : path) {
+                if (!actionDone) {
+                    if (vertex.getX() < x && position.equals(Position.RIGHT)) {
+                        changePosition();
+                    } else if (vertex.getX() > x && position.equals(Position.LEFT)) {
+                        changePosition();
+                    }
 
-                try {
-                    Thread.sleep(25);
-                }catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
+                    try {
+                        Thread.sleep(25);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
 
-                Platform.runLater(() -> {
-                    setX(vertex.getX());
-                    setY(vertex.getY());
-                });
+                    Platform.runLater(() -> {
+                        setX(vertex.getX());
+                        setY(vertex.getY());
+                    });
+                }
+                else
+                    interrupt();
             }
-            done = true;
+            actionDone = true;
         }
     }
 }
