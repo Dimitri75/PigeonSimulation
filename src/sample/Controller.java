@@ -11,6 +11,7 @@ import classes.list.CircularQueue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -22,13 +23,15 @@ import java.util.Random;
 
 public class Controller {
     @FXML
+    private Slider slider_size;
+    @FXML
     private Button button_start;
     @FXML
     private Label label_error;
     @FXML
     private AnchorPane anchorPane;
 
-    private final static Integer PACE = 40;
+    private Integer PACE;
 
     private Boolean started = false;
     private Graph graph;
@@ -139,6 +142,8 @@ public class Controller {
     @FXML
     public void start() {
         clearAll();
+        slider_size.setFocusTraversable(false);
+        PACE = (slider_size.getValue() < 10) ? 10 : (int)slider_size.getValue();
         initObstacles();
         initPigeons();
         initChild();
