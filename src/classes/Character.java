@@ -82,8 +82,6 @@ public class Character extends MapElement implements Runnable {
                         setY(vertex.getY());
                     });
                 }
-                else
-                    interrupt();
             }
             actionDone = true;
         }

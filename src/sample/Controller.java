@@ -6,10 +6,12 @@ import classes.enumerations.FoodState;
 import classes.enumerations.Image;
 import classes.graph.Graph;
 import classes.graph.Vertex;
+import classes.interfaces.Location;
 import classes.list.CircularQueue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -35,6 +37,7 @@ public class Controller {
     private List<Character> pigeonsList = new ArrayList<>();  // TODO : A l'ajout de nourriture, démarrer le trajet des pigeons
     private Character child;
     private List<Thread> pigeonThreads = new ArrayList<>();
+    private List<Location> obstacles;
 
     public Controller() {
 
@@ -69,6 +72,10 @@ public class Controller {
                 }
             });
         }
+    }
+
+    public void initObstacles(){
+
     }
 
     public void initPigeons() {
@@ -115,7 +122,7 @@ public class Controller {
 
     @FXML
     void onPressEnter(KeyEvent event) {
-        if (event.getCode().toString().equals("ENTER")) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
             clearAll();
             button_start.fire();
         }
