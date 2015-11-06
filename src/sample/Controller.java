@@ -187,8 +187,8 @@ public class Controller {
         }
     }
 
-    public void initFoodChasing(){
-        for (Character p : pigeonsList){
+    public void initFoodChasing() {
+        for (Character p : pigeonsList) {
             p.FOOD_EATEN = false;
         }
     }

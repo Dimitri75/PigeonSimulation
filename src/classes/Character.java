@@ -56,9 +56,9 @@ public class Character extends MapElement implements Runnable {
     public void run() {
         if (path != null) {
             Iterator<Vertex> vertexIterator = path.iterator();
-            while(vertexIterator.hasNext()){
+            while (vertexIterator.hasNext()) {
                 Vertex v = vertexIterator.next();
-                if(!FOOD_EATEN) {
+                if (!FOOD_EATEN) {
                     if (v.getX() < x && position.equals(Position.RIGHT)) {
                         changePosition();
                     } else if (v.getX() > x && position.equals(Position.LEFT)) {
@@ -73,11 +73,11 @@ public class Character extends MapElement implements Runnable {
                     try {
                         Thread.sleep(25);
                     } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
+                        interrupt();
                         break;
                     }
-                }else{
-                    Thread.currentThread().interrupt();
+                } else {
+                    interrupt();
                     break;
                 }
             }
