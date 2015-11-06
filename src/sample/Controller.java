@@ -199,13 +199,16 @@ public class Controller {
                     anchorPane.getChildren().remove(excedent.getShape());
 
                 stopMovement();
-                startMovement();
+
+                Character.FOOD_TO_EAT = food;
+
+                startChasingFood();
             }
         }
     }
 
 
-    public void startMovement() {
+    public void startChasingFood() {
         try {
             for (Character pigeon : pigeonsList) {
                 Vertex destination = graph.getVertexByLocation(foodCircularQueue.peek().getX(), foodCircularQueue.peek().getY());
@@ -223,6 +226,10 @@ public class Controller {
         }
     }
 
+    public void startScattering(){
+        //TODO les pigeons qui se dispersent
+    }
+
     public void stopMovement() {
         if (!pigeonThreads.isEmpty()) {
             for (Thread thread : pigeonThreads)
@@ -238,5 +245,7 @@ public class Controller {
                 return false;
         return true;
     }
+
+
 }
 
