@@ -26,7 +26,7 @@ public class Controller {
     private AnchorPane anchorPane;
 
     private final static Integer PACE = 10;
-    private final static Integer NB_PIGEONS = 10;
+    private final static Integer NB_PIGEONS = 5;
 
     private Boolean started = false;
     private Graph graph;

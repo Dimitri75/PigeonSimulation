@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 /**
  * Created by Dimitri on 05/11/2015.
  */
-public class MapElement implements Location {
+public class MapElement extends Thread implements Location {
     int x, y;
     private Rectangle shape;
 

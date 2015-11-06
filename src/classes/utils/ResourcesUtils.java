@@ -1,6 +1,7 @@
 package classes.utils;
 
 import classes.enumerations.Image;
+import classes.enumerations.Position;
 import javafx.scene.paint.ImagePattern;
 
 import java.util.HashMap;
@@ -15,7 +16,8 @@ public class ResourcesUtils {
 
     private Map<Integer, Image> goodFoodDictionnary;
     private Map<Integer, Image> badFoodDictionnary;
-    private Map<Integer, Image> birdsDictionnary;
+    private Map<Integer, Image> left_birdsDictionnary;
+    private Map<Integer, Image> right_birdsDictionnary;
 
     public static ResourcesUtils getInstance(){
         if (INSTANCE == null)
@@ -39,11 +41,17 @@ public class ResourcesUtils {
         badFoodDictionnary.put(3, Image.BAD_CUPAKE_3);
         badFoodDictionnary.put(4, Image.BAD_CUPAKE_4);
 
-        birdsDictionnary = new HashMap<>();
-        birdsDictionnary.put(0, Image.BLUE_BIRD);
-        birdsDictionnary.put(1, Image.RED_BIRD);
-        birdsDictionnary.put(2, Image.BROWN_BIRD);
-        birdsDictionnary.put(3, Image.GREEN_BIRD);
+        left_birdsDictionnary = new HashMap<>();
+        left_birdsDictionnary.put(0, Image.LEFT_BLUE_BIRD);
+        left_birdsDictionnary.put(1, Image.LEFT_RED_BIRD);
+        left_birdsDictionnary.put(2, Image.LEFT_BROWN_BIRD);
+        left_birdsDictionnary.put(3, Image.LEFT_GREEN_BIRD);
+
+        right_birdsDictionnary = new HashMap<>();
+        right_birdsDictionnary.put(0, Image.RIGHT_BLUE_BIRD);
+        right_birdsDictionnary.put(1, Image.RIGHT_RED_BIRD);
+        right_birdsDictionnary.put(2, Image.RIGHT_BROWN_BIRD);
+        right_birdsDictionnary.put(3, Image.RIGHT_GREEN_BIRD);
     }
 
     public Integer getRandomFoodIndex(){
@@ -56,11 +64,17 @@ public class ResourcesUtils {
 
     public Integer getRandomBirdIndex(){
         Random ran = new Random();
-        return ran.nextInt(birdsDictionnary.size());
+        return ran.nextInt(left_birdsDictionnary.size());
     }
 
-    public ImagePattern getBird(Integer index){
-        javafx.scene.image.Image image = new javafx.scene.image.Image(birdsDictionnary.get(index).toString());
+    public ImagePattern getBird(Integer index, Position position){
+        javafx.scene.image.Image image;
+
+        if (position.equals(Position.LEFT))
+            image = new javafx.scene.image.Image(left_birdsDictionnary.get(index).toString());
+        else
+            image = new javafx.scene.image.Image(right_birdsDictionnary.get(index).toString());
+
         return new ImagePattern(image);
     }
 

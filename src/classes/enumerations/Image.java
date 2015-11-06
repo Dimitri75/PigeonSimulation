@@ -16,10 +16,15 @@ public enum Image {
     BAD_CUPAKE_3("res/images/bad_cupcake3.png"),
     BAD_CUPAKE_4("res/images/bad_cupcake4.png"),
 
-    BLUE_BIRD("res/images/blue_bird.png"),
-    RED_BIRD("res/images/red_bird.png"),
-    BROWN_BIRD("res/images/brown_bird.png"),
-    GREEN_BIRD("res/images/green_bird.png"),
+    RIGHT_BLUE_BIRD("res/images/right_blue_bird.png"),
+    RIGHT_RED_BIRD("res/images/right_red_bird.png"),
+    RIGHT_BROWN_BIRD("res/images/right_brown_bird.png"),
+    RIGHT_GREEN_BIRD("res/images/right_green_bird.png"),
+
+    LEFT_BLUE_BIRD("res/images/left_blue_bird.png"),
+    LEFT_RED_BIRD("res/images/left_red_bird.png"),
+    LEFT_BROWN_BIRD("res/images/left_brown_bird.png"),
+    LEFT_GREEN_BIRD("res/images/left_green_bird.png"),
 
     CHILD("res/images/isaac.png");
 
