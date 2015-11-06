@@ -34,6 +34,7 @@ public class Controller {
     private CircularQueue<Food> foodCircularQueue = new CircularQueue(3);   // TODO : Ajouter un listener sur la liste pour notifier les pigeons de chaque modification
     private List<Character> pigeonsList = new ArrayList<>();  // TODO : A l'ajout de nourriture, démarrer le trajet des pigeons
     private Character child;
+    private List<Thread> pigeonThreads = new ArrayList<>();
 
     public Controller() {
 
@@ -154,7 +155,7 @@ public class Controller {
             if (excedent != null)
                 anchorPane.getChildren().remove(excedent.getShape());
         }
-
+        stopMovement();
         testMovement();
     }
 
@@ -167,9 +168,19 @@ public class Controller {
                 pigeon.runPath(graph, start, destination);
                 Thread t = new Thread(pigeon);
                 t.start();
+                pigeonThreads.add(t);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void stopMovement() {
+        if (!pigeonThreads.isEmpty()) {
+            for (int i = 0; i < pigeonThreads.size(); i++) {
+                pigeonThreads.get(i).interrupt();
+            }
+            pigeonThreads.clear();
         }
     }
 }

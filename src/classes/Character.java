@@ -70,7 +70,8 @@ public class Character extends MapElement implements Runnable {
                 try {
                     Thread.sleep(25);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                    break;
                 }
             }
         }
