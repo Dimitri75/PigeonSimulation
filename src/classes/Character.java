@@ -16,9 +16,7 @@ public class Character extends MapElement implements Runnable {
     private int characterImageIndex;
     private Position position;
     private List<Vertex> path;
-    private static boolean ACTION_DONE;
-
-    public static Food FOOD_TO_EAT;
+    public static boolean ACTION_DONE;
 
     public Character(int x, int y, int shapeSize) {
         super(x, y, shapeSize);
@@ -77,7 +75,6 @@ public class Character extends MapElement implements Runnable {
                 }
             }
             ACTION_DONE = true;
-            FOOD_TO_EAT.getShape().setOpacity(0.0);
         }
     }
 }

@@ -16,10 +16,16 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import static classes.Character.ACTION_DONE;
 
 public class Controller {
     @FXML
@@ -199,9 +205,6 @@ public class Controller {
                     anchorPane.getChildren().remove(excedent.getShape());
 
                 stopMovement();
-
-                Character.FOOD_TO_EAT = food;
-
                 startChasingFood();
             }
         }
@@ -210,6 +213,7 @@ public class Controller {
 
     public void startChasingFood() {
         try {
+            //startTimer();
             for (Character pigeon : pigeonsList) {
                 Vertex destination = graph.getVertexByLocation(foodCircularQueue.peek().getX(), foodCircularQueue.peek().getY());
                 Vertex start = graph.getVertexByLocation(pigeon.getX(), pigeon.getY());
@@ -246,6 +250,16 @@ public class Controller {
         return true;
     }
 
-
+    // TODO Fix
+    public void startTimer() {
+        Runnable isFoodConsumed = () -> {
+            if (ACTION_DONE && !foodCircularQueue.isEmpty()){
+                Rectangle consumedFood = foodCircularQueue.pop().getShape();
+                anchorPane.getChildren().remove(consumedFood);
+            }
+        };
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(isFoodConsumed, 0, 250, TimeUnit.MILLISECONDS);
+    }
 }
 
