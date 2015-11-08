@@ -266,7 +266,6 @@ public class Controller {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("Hello");
                         if (ACTION_DONE && !foodCircularQueue.isEmpty()) {
                             stopMovement();
 
