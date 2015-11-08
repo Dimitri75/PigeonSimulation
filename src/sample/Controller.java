@@ -8,6 +8,7 @@ import classes.enumerations.Image;
 import classes.graph.Graph;
 import classes.graph.Vertex;
 import classes.list.CircularQueue;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,10 +18,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -39,9 +39,11 @@ public class Controller {
 
     private Integer PACE;
 
+    private Timer timer;
     private Boolean started = false;
     private Graph graph;
     private CircularQueue<Food> foodCircularQueue = new CircularQueue(3);
+    private CircularQueue<Food> badFoodCircularQueue = new CircularQueue(3);
     private List<Character> pigeonsList = new ArrayList<>();
     private Character child;
     private List<Thread> pigeonThreads = new ArrayList<>();
@@ -97,7 +99,7 @@ public class Controller {
                 }
             }
         }
-        for (int y = 2; y < maxY; y*=2) {
+        for (int y = 2; y < maxY; y *= 2) {
             for (int x = 3; x < maxX; x++) {
                 if (x % 5 == 0 || x % 5 == 1) {
                     obstacle = new MapElement(x * PACE, y * PACE, PACE, Image.OBSTACLE);
@@ -149,7 +151,7 @@ public class Controller {
     public void start() {
         clearAll();
         slider_size.setFocusTraversable(false);
-        PACE = (slider_size.getValue() < 10) ? 10 : (int)slider_size.getValue();
+        PACE = (slider_size.getValue() < 10) ? 10 : (int) slider_size.getValue();
         initObstacles();
         initPigeons();
         initChild();
@@ -213,7 +215,7 @@ public class Controller {
 
     public void startChasingFood() {
         try {
-            //startTimer();
+            startTimer();
             for (Character pigeon : pigeonsList) {
                 Vertex destination = graph.getVertexByLocation(foodCircularQueue.peek().getX(), foodCircularQueue.peek().getY());
                 Vertex start = graph.getVertexByLocation(pigeon.getX(), pigeon.getY());
@@ -230,7 +232,7 @@ public class Controller {
         }
     }
 
-    public void startScattering(){
+    public void startScattering() {
         //TODO les pigeons qui se dispersent
     }
 
@@ -250,16 +252,42 @@ public class Controller {
         return true;
     }
 
-    // TODO Fix
+
     public void startTimer() {
-        Runnable isFoodConsumed = () -> {
-            if (ACTION_DONE && !foodCircularQueue.isEmpty()){
-                Rectangle consumedFood = foodCircularQueue.pop().getShape();
-                anchorPane.getChildren().remove(consumedFood);
+        if (timer != null) {
+            timer.purge();
+            timer.cancel();
+        }
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Hello");
+                        if (ACTION_DONE && !foodCircularQueue.isEmpty()) {
+                            stopMovement();
+
+                            Food badFood;
+                            Food chasedFood = foodCircularQueue.pop();
+
+                            if (chasedFood.getFoodState().equals(FoodState.GOOD))
+                                anchorPane.getChildren().remove(chasedFood.getShape());
+                            else if ((badFood = badFoodCircularQueue.pushAndPopExcedent(chasedFood)) != null)
+                                anchorPane.getChildren().remove(badFood.getShape());
+
+                            ACTION_DONE = false;
+                            timer.cancel();
+
+                            if (!foodCircularQueue.isEmpty())
+                                startChasingFood();
+                        }
+                    }
+                });
             }
-        };
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(isFoodConsumed, 0, 250, TimeUnit.MILLISECONDS);
+        }, 0, 250);
     }
 }
 
