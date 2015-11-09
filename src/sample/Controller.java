@@ -226,10 +226,6 @@ public class Controller {
         }
     }
 
-    public void startScattering(){
-        //TODO les pigeons qui se dispersent
-    }
-
     public void stopMovement() {
         if (!pigeonThreads.isEmpty()) {
             for (Thread thread : pigeonThreads)

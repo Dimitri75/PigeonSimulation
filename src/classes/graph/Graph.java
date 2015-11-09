@@ -132,4 +132,8 @@ public class Graph {
 
         return path;
     }
+
+    public int getPace(){
+        return pace;
+    }
 }
