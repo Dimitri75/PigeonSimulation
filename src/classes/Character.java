@@ -23,8 +23,7 @@ public class Character extends MapElement implements Runnable {
     private Position position;
     private List<Vertex> path;
 
-    private static boolean ACTION_DONE;
-
+    public static boolean ACTION_DONE;
     public static Food FOOD_TO_EAT;
 
 
@@ -133,7 +132,6 @@ public class Character extends MapElement implements Runnable {
                                             pigeons.notifyAll();
                                         }
                                     }
-
                                     pigeons.wait();
                                     if (getX() == p.getX() && getY() == p.getY()) {
 
@@ -171,6 +169,7 @@ public class Character extends MapElement implements Runnable {
                     }
                 }
             }
+            ACTION_DONE = true;
             return false;
         }
     }

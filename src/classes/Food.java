@@ -29,4 +29,8 @@ public class Food extends MapElement {
                 break;
         }
     }
+
+    public FoodState getFoodState() {
+        return foodState;
+    }
 }
