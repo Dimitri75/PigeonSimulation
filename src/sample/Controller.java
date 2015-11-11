@@ -8,6 +8,7 @@ import classes.enumerations.Image;
 import classes.graph.Graph;
 import classes.graph.Vertex;
 import classes.list.CircularQueue;
+import com.sun.org.apache.bcel.internal.generic.GOTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+
 import java.util.*;
 
 import static classes.Character.ACTION_DONE;
@@ -90,28 +92,68 @@ public class Controller {
         }
     }
 
-    public void notifyAllPigeons(){
+    public void notifyAllPigeons() {
+        List<Vertex> vertexes = new ArrayList<>();
+        // Init random vertexes
+        for (int i = 0; i < pigeonsList.size(); i++) {
+            vertexes.add(graph.getRandomVertex());
+        }
+
+        boolean areVertexesMisplaced;
+        do {
+            areVertexesMisplaced = false;
+
+            FOR_TO_BRAKE:
+            for (int i = 0; i < vertexes.size(); i++) {
+                for (int y = vertexes.size() - 1; y >= 0; y--) {
+                    if (i != y) {
+                        if (areVertexesTooClose(vertexes.get(i), vertexes.get(y))) {
+                            vertexes.set(y, graph.getRandomVertex());
+                            areVertexesMisplaced = true;
+                            break FOR_TO_BRAKE;
+                        }
+                    }
+                }
+            }
+        } while (areVertexesMisplaced);
+
         stopMovement();
-        for (Character pigeon : pigeonsList)
-            notifyPigeon(pigeon);
+        for (int i = 0; i < pigeonsList.size(); i++) {
+            notifyPigeon(pigeonsList.get(i), vertexes.get(i));
+        }
     }
 
-    public boolean tryNotifyPigeon(int x, int y){
-        Character pigeon;
-        if ((pigeon = getPigeonFromLocation(x, y)) != null){
-            notifyPigeon(pigeon);
+    public boolean areVertexesTooClose(Vertex vertex1, Vertex vertex2) {
+        if ((vertex1.getX() == vertex2.getX() && vertex1.getY() == vertex2.getY()) ||
+                (vertex1.getX() == vertex2.getX() + PACE && vertex1.getY() == vertex2.getY()) ||
+                (vertex1.getX() == vertex2.getX() - PACE && vertex1.getY() == vertex2.getY()) ||
+                (vertex1.getX() == vertex2.getX() && vertex1.getY() == vertex2.getY() + PACE) ||
+                (vertex1.getX() == vertex2.getX() && vertex1.getY() == vertex2.getY() - PACE) ||
+                (vertex1.getX() == vertex2.getX() + 2*PACE && vertex1.getY() == vertex2.getY()) ||
+                (vertex1.getX() == vertex2.getX() - 2*PACE && vertex1.getY() == vertex2.getY()) ||
+                (vertex1.getX() == vertex2.getX() && vertex1.getY() == vertex2.getY() + 2*PACE) ||
+                (vertex1.getX() == vertex2.getX() && vertex1.getY() == vertex2.getY() - 2*PACE)) {
             return true;
         }
         return false;
     }
 
-    public void notifyPigeon(Character pigeon){
+    public boolean tryNotifyPigeon(int x, int y) {
+        Character pigeon;
+        if ((pigeon = getPigeonFromLocation(x, y)) != null) {
+            Vertex destination = graph.getRandomVertex();
+            notifyPigeon(pigeon, destination);
+            return true;
+        }
+        return false;
+    }
+
+    public void notifyPigeon(Character pigeon, Vertex destination) {
         if (pigeonThreads.containsKey(pigeon))
             pigeonThreads.get(pigeon).interrupt();
         pigeonThreads.remove(pigeon);
 
         Vertex start = graph.getVertexByLocation(pigeon.getX(), pigeon.getY());
-        Vertex destination = graph.getRandomVertex();
 
         pigeon.initPath(graph, start, destination);
 
@@ -121,7 +163,7 @@ public class Controller {
         pigeonThreads.put(pigeon, thread);
     }
 
-    public Character getPigeonFromLocation(int x, int y){
+    public Character getPigeonFromLocation(int x, int y) {
         for (Character pigeon : pigeonsList)
             if (pigeon.getX() == x && pigeon.getY() == y)
                 return pigeon;
@@ -207,8 +249,7 @@ public class Controller {
         if (event.getCode().equals(KeyCode.ENTER)) {
             clearAll();
             button_start.fire();
-        }
-        else
+        } else
             anchorPane.requestFocus();
     }
 
