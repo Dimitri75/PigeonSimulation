@@ -190,6 +190,7 @@ public class Controller {
 
     @FXML
     public void putFood(MouseEvent e) {
+        stopMovement();
         if (started) {
             int x = (int) e.getSceneX() - (int) e.getSceneX() % PACE;
             int y = (int) e.getSceneY() - (int) e.getSceneY() % PACE;
@@ -223,9 +224,9 @@ public class Controller {
                 pigeon.initPath(graph, start, destination);
 
                 Thread thread = new Thread(pigeon);
-                thread.start();
-
                 pigeonThreads.add(thread);
+
+                thread.start();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -273,16 +274,34 @@ public class Controller {
                             else if ((badFood = badFoodCircularQueue.pushAndPopExcedent(chasedFood)) != null)
                                 anchorPane.getChildren().remove(badFood.getShape());
 
-                            ACTION_DONE = false;
+
                             timer.cancel();
 
-                            if (!foodCircularQueue.isEmpty())
+                            if (!foodCircularQueue.isEmpty()) {
+                                ACTION_DONE = false;
                                 startChasingFood();
+                            } else {
+                                ACTION_DONE = true;
+                                startScattering();
+                            }
                         }
                     }
                 });
             }
         }, 0, 250);
+    }
+
+    public void startScattering() {
+        try {
+            for (Character pigeon : pigeonsList) {
+                Thread thread = new Thread(pigeon);
+                pigeonThreads.add(thread);
+
+                thread.start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

@@ -66,7 +66,7 @@ public class Character extends MapElement implements Runnable {
     @Override
     public void run() {
         try {
-            synchronized (this) {
+            if (!ACTION_DONE) {
                 if (path != null) {
                     ACTION_DONE = false;
                     for (Vertex vertex : path) {
@@ -86,11 +86,10 @@ public class Character extends MapElement implements Runnable {
                         }
                     }
                     ACTION_DONE = true;
-                    FOOD_TO_EAT.getShape().setOpacity(0.0);
 
-                    this.notifyAll();
-                    scatter();
                 }
+            } else {
+                scatter();
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -102,46 +101,44 @@ public class Character extends MapElement implements Runnable {
             Iterator i = pigeons.iterator();
             while (i.hasNext()) {
                 Character p = (Character) i.next();
-                synchronized (pigeons) {
-                    boolean scatteringFinished = false;
-                    Random randomGenerator = new Random();
-                    while (!scatteringFinished) {
-                        ifToBreak:
-                        if (getX() - p.getX() <= graph.getPace() && getX() - p.getX() >= -graph.getPace()) {
-                            if (getY() - p.getY() <= graph.getPace() && getY() - p.getY() >= -graph.getPace()) {
-                                if (p != this) {
-                                    Thread.sleep(200);
+                boolean scatteringFinished = false;
+                Random randomGenerator = new Random();
+                while (!scatteringFinished) {
+                    ifToBreak:
+                    if (getX() - p.getX() <= graph.getPace() && getX() - p.getX() >= -graph.getPace()) {
+                        if (getY() - p.getY() <= graph.getPace() && getY() - p.getY() >= -graph.getPace()) {
+                            if (p != this) {
 
-                                    Vertex v = graph.getVertexByLocation(getX(), getY());
-                                    Object[] edges = v.getAdjacencies().toArray();
+                                Thread.sleep(200);
 
-                                    boolean isPigeonInEdge = true;
-                                    while (isPigeonInEdge) {
-                                        long range = (long) edges.length - (long) 1 + 1;
-                                        long fraction = (long) (range * randomGenerator.nextDouble());
-                                        int randomNumber = (int) (fraction);
 
-                                        Edge destination = (Edge) edges[randomNumber];
+                                Vertex v = graph.getVertexByLocation(getX(), getY());
+                                Object[] edges = v.getAdjacencies().toArray();
 
-                                        if (destination.getTarget().getX() != p.getX() || destination.getTarget().getY() != p.getY()) {
-                                            isPigeonInEdge = false;
-                                            Platform.runLater(() -> {
-                                                setX(destination.getTarget().getX());
-                                                setY(destination.getTarget().getY());
-                                            });
-                                            pigeons.notifyAll();
-                                        }
+                                boolean isPigeonInEdge = true;
+                                while (isPigeonInEdge) {
+                                    System.out.println("pigeon sur edge");
+                                    long range = (long) edges.length - (long) 1 + 1;
+                                    long fraction = (long) (range * randomGenerator.nextDouble());
+                                    int randomNumber = (int) (fraction);
+
+                                    Edge destination = (Edge) edges[randomNumber];
+
+                                    if (destination.getTarget().getX() != p.getX() || destination.getTarget().getY() != p.getY()) {
+                                        isPigeonInEdge = false;
+                                        Platform.runLater(() -> {
+                                            setX(destination.getTarget().getX());
+                                            setY(destination.getTarget().getY());
+                                        });
                                     }
-                                    pigeons.wait();
-                                    if (getX() == p.getX() && getY() == p.getY()) {
+                                }
+                                System.out.println("déplacement effectué");
+                                if (getX() == p.getX() && getY() == p.getY()) {
 
-                                    } else {
-                                        if (getX() - p.getX() > graph.getPace() || getX() - p.getX() < -(graph.getPace()) || getY() - p.getY() > graph.getPace() || getY() - p.getY() < -(graph.getPace())) {
-                                            scatteringFinished = true;
-                                        }
-                                    }
                                 } else {
-                                    scatteringFinished = true;
+                                    if (getX() - p.getX() > graph.getPace() || getX() - p.getX() < -(graph.getPace()) || getY() - p.getY() > graph.getPace() || getY() - p.getY() < -(graph.getPace())) {
+                                        scatteringFinished = true;
+                                    }
                                 }
                             } else {
                                 scatteringFinished = true;
@@ -149,28 +146,27 @@ public class Character extends MapElement implements Runnable {
                         } else {
                             scatteringFinished = true;
                         }
+                    } else {
+                        scatteringFinished = true;
                     }
                 }
             }
         }
-        return;
     }
 
-    public synchronized boolean inPigeonScope() throws InterruptedException {
-        synchronized (pigeons) {
-            Iterator i = pigeons.iterator();
-            while (i.hasNext()) {
-                Character p = (Character) i.next();
-                if (getX() - p.getX() <= graph.getPace() && getX() - p.getX() >= -(graph.getPace())) {
-                    if (getY() - p.getY() <= graph.getPace() && getY() - p.getY() >= -(graph.getPace())) {
-                        if (p != this) {
-                            return true;
-                        }
+    public boolean inPigeonScope() throws InterruptedException {
+        Iterator i = pigeons.iterator();
+        while (i.hasNext()) {
+            Character p = (Character) i.next();
+            if (getX() - p.getX() <= graph.getPace() && getX() - p.getX() >= -(graph.getPace())) {
+                if (getY() - p.getY() <= graph.getPace() && getY() - p.getY() >= -(graph.getPace())) {
+                    if (p != this) {
+                        System.out.println("pigeon trouvé");
+                        return true;
                     }
                 }
             }
-            ACTION_DONE = true;
-            return false;
         }
+        return false;
     }
 }
