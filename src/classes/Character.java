@@ -26,6 +26,8 @@ public class Character extends MapElement implements Runnable {
     public static boolean ACTION_DONE;
     public static Food FOOD_TO_EAT;
 
+    private static List<Vertex> locationToGo;
+
 
     public Character(int x, int y, int shapeSize) {
         super(x, y, shapeSize);
@@ -67,27 +69,7 @@ public class Character extends MapElement implements Runnable {
     public void run() {
         try {
             if (!ACTION_DONE) {
-                if (path != null) {
-                    ACTION_DONE = false;
-                    for (Vertex vertex : path) {
-                        if (!ACTION_DONE) {
-                            if (vertex.getX() < x && position.equals(Position.RIGHT)) {
-                                changePosition();
-                            } else if (vertex.getX() > x && position.equals(Position.LEFT)) {
-                                changePosition();
-                            }
-
-                            Thread.sleep(75);
-
-                            Platform.runLater(() -> {
-                                setX(vertex.getX());
-                                setY(vertex.getY());
-                            });
-                        }
-                    }
-                    ACTION_DONE = true;
-
-                }
+                chaseFood();
             } else {
                 scatter();
             }
@@ -96,65 +78,138 @@ public class Character extends MapElement implements Runnable {
         }
     }
 
-    public void scatter() throws InterruptedException {
-        while (inPigeonScope()) {
-            Iterator i = pigeons.iterator();
-            while (i.hasNext()) {
-                Character p = (Character) i.next();
-                boolean scatteringFinished = false;
-                Random randomGenerator = new Random();
-                while (!scatteringFinished) {
-                    ifToBreak:
-                    if (getX() - p.getX() <= graph.getPace() && getX() - p.getX() >= -graph.getPace()) {
-                        if (getY() - p.getY() <= graph.getPace() && getY() - p.getY() >= -graph.getPace()) {
-                            if (p != this) {
+    public void takePath(List<Vertex> path) throws InterruptedException {
+        if (path != null) {
+            int i = 0;
+            for (Vertex vertex : path) {
+                if (vertex.getX() < x && position.equals(Position.RIGHT)) {
+                    changePosition();
+                } else if (vertex.getX() > x && position.equals(Position.LEFT)) {
+                    changePosition();
+                }
 
-                                Thread.sleep(200);
+                Thread.sleep(75);
 
+                System.out.println("x = " + vertex.getX() + "\ny = " + vertex.getY() + "\n\n");
+                System.out.println("Size of Path " + path.size());
+                i++;
+                System.out.println("i = " + i);
 
-                                Vertex v = graph.getVertexByLocation(getX(), getY());
-                                Object[] edges = v.getAdjacencies().toArray();
+                Platform.runLater(() -> {
+                    setX(vertex.getX());
+                    setY(vertex.getY());
+                });
+            }
+        }
+        Thread.currentThread().interrupt();
+    }
 
-                                boolean isPigeonInEdge = true;
-                                while (isPigeonInEdge) {
-                                    System.out.println("pigeon sur edge");
-                                    long range = (long) edges.length - (long) 1 + 1;
-                                    long fraction = (long) (range * randomGenerator.nextDouble());
-                                    int randomNumber = (int) (fraction);
-
-                                    Edge destination = (Edge) edges[randomNumber];
-
-                                    if (destination.getTarget().getX() != p.getX() || destination.getTarget().getY() != p.getY()) {
-                                        isPigeonInEdge = false;
-                                        Platform.runLater(() -> {
-                                            setX(destination.getTarget().getX());
-                                            setY(destination.getTarget().getY());
-                                        });
-                                    }
-                                }
-                                System.out.println("déplacement effectué");
-                                if (getX() == p.getX() && getY() == p.getY()) {
-
-                                } else {
-                                    if (getX() - p.getX() > graph.getPace() || getX() - p.getX() < -(graph.getPace()) || getY() - p.getY() > graph.getPace() || getY() - p.getY() < -(graph.getPace())) {
-                                        scatteringFinished = true;
-                                    }
-                                }
-                            } else {
-                                scatteringFinished = true;
-                            }
-                        } else {
-                            scatteringFinished = true;
-                        }
-                    } else {
-                        scatteringFinished = true;
+    public void chaseFood() throws InterruptedException {
+        if (path != null) {
+            ACTION_DONE = false;
+            for (Vertex vertex : path) {
+                if (!ACTION_DONE) {
+                    if (vertex.getX() < x && position.equals(Position.RIGHT)) {
+                        changePosition();
+                    } else if (vertex.getX() > x && position.equals(Position.LEFT)) {
+                        changePosition();
                     }
+
+                    Thread.sleep(75);
+
+                    Platform.runLater(() -> {
+                        setX(vertex.getX());
+                        setY(vertex.getY());
+                    });
                 }
             }
+            ACTION_DONE = true;
         }
     }
 
-    public boolean inPigeonScope() throws InterruptedException {
+    public synchronized void scatter() throws InterruptedException {
+//        while (inPigeonScope()) {
+        Iterator i = pigeons.iterator();
+        //while (i.hasNext()) {
+        Character p = (Character) i.next();
+        boolean scatteringFinished = false;
+        Random randomGenerator = new Random();
+        //while (!scatteringFinished) {
+//                    ifToBreak:
+//                    if (getX() - p.getX() <= graph.getPace() && getX() - p.getX() >= -graph.getPace()) {
+//                        if (getY() - p.getY() <= graph.getPace() && getY() - p.getY() >= -graph.getPace()) {
+//                            if (p != this) {
+//
+//                                Thread.sleep(200);
+//
+//
+//                                Vertex v = graph.getVertexByLocation(getX(), getY());
+//                                Object[] edges = v.getAdjacencies().toArray();
+//
+//                                boolean isPigeonInEdge = true;
+//                                while (isPigeonInEdge) {
+//                                    System.out.println("pigeon sur edge");
+//                                    long range = (long) edges.length - (long) 1 + 1;
+//                                    long fraction = (long) (range * randomGenerator.nextDouble());
+//                                    int randomNumber = (int) (fraction);
+//
+//                                    Edge destination = (Edge) edges[randomNumber];
+//
+//                                    if (destination.getTarget().getX() != p.getX() || destination.getTarget().getY() != p.getY()) {
+//                                        isPigeonInEdge = false;
+//                                        Platform.runLater(() -> {
+//                                            setX(destination.getTarget().getX());
+//                                            setY(destination.getTarget().getY());
+//                                        });
+//                                    }
+//                                }
+//                                System.out.println("déplacement effectué");
+//                                if (getX() == p.getX() && getY() == p.getY()) {
+//
+//                                } else {
+//                                    if (getX() - p.getX() > graph.getPace() || getX() - p.getX() < -(graph.getPace()) || getY() - p.getY() > graph.getPace() || getY() - p.getY() < -(graph.getPace())) {
+//                                        scatteringFinished = true;
+//                                    }
+//                                }
+//                            } else {
+//                                scatteringFinished = true;
+//                            }
+//                        } else {
+//                            scatteringFinished = true;
+//                        }
+//                    } else {
+//                        scatteringFinished = true;
+//                    }
+
+
+        Vertex v = getValidRandomLocation();
+
+        takePath(graph.dijkstra(graph.getVertexByLocation(getX(), getY()), v));
+        //}
+        //}
+//        }
+    }
+
+    public void getValidRandomLocation() {
+        boolean isCloseLocation = true;
+        while (isCloseLocation) {
+            Vertex v = graph.getRandomVertex();
+
+            forTobreak:
+            for (Vertex vertex : locationToGo) {
+                Object[] edges = vertex.getAdjacencies().toArray();
+                for (int i = 0; i < edges.length; i++) {
+                    Edge e = (Edge) edges[i];
+                    if (e.getTarget().getX() == v.getX() && e.getTarget().getY() == v.getY()) {
+                        break forTobreak;
+                    }
+                }
+            }
+
+        }
+    }
+
+    public synchronized boolean inPigeonScope() throws InterruptedException {
         Iterator i = pigeons.iterator();
         while (i.hasNext()) {
             Character p = (Character) i.next();

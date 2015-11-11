@@ -3,10 +3,7 @@ package classes.graph;
 import classes.MapElement;
 import classes.enumerations.MovementSpeed;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Created by Dimitri on 21/10/2015.
@@ -92,7 +89,13 @@ public class Graph {
         }
     }
 
-    public List<Vertex> dijkstra(Vertex start, Vertex destination) {
+    public Vertex getRandomVertex(){
+        Random randomGenerator = new Random();
+
+        return listVertex.get(randomGenerator.nextInt(listVertex.size()));
+    }
+
+    public synchronized List<Vertex> dijkstra(Vertex start, Vertex destination) {
         // ReinitVertex
         for (Vertex vertex : listVertex) {
             vertex.setMinDistance(Double.POSITIVE_INFINITY);

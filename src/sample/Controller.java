@@ -112,32 +112,35 @@ public class Controller {
 
     public void initPigeons() {
         try {
-            Random random = new Random();
-            Character character;
-            int nbPigeons = (int) (anchorPane.getPrefHeight() / PACE);
-            for (int i = 0; i < nbPigeons; i++) {
-                character = new Character(0, 0, PACE);
-
-                int randX = -1;
-                int randY = -1;
-
-                while (randX + character.getShape().getWidth() > anchorPane.getWidth() ||
-                        randY + character.getShape().getHeight() > anchorPane.getHeight() ||
-                        !checkIfNoObstacles(randX, randY) ||
-                        randX < 0 || randY < 0) {
-                    randX = random.nextInt((int) anchorPane.getWidth());
-                    randY = random.nextInt((int) anchorPane.getHeight());
-
-                    randX -= randX % PACE;
-                    randY -= randY % PACE;
-                }
-                character.setX(randX);
-                character.setY(randY);
-
-
-                anchorPane.getChildren().add(character.getShape());
-                pigeonsList.add(character);
+            if (!pigeonThreads.isEmpty()) {
+                stopMovement();
             }
+                Random random = new Random();
+                Character character;
+                int nbPigeons = (int) (anchorPane.getPrefHeight() / PACE);
+                for (int i = 0; i < nbPigeons; i++) {
+                    character = new Character(0, 0, PACE);
+
+                    int randX = -1;
+                    int randY = -1;
+
+                    while (randX + character.getShape().getWidth() > anchorPane.getWidth() ||
+                            randY + character.getShape().getHeight() > anchorPane.getHeight() ||
+                            !checkIfNoObstacles(randX, randY) ||
+                            randX < 0 || randY < 0) {
+                        randX = random.nextInt((int) anchorPane.getWidth());
+                        randY = random.nextInt((int) anchorPane.getHeight());
+
+                        randX -= randX % PACE;
+                        randY -= randY % PACE;
+                    }
+                    character.setX(randX);
+                    character.setY(randY);
+
+
+                    anchorPane.getChildren().add(character.getShape());
+                    pigeonsList.add(character);
+                }
         } catch (Exception e) {
             label_error.setText("Bravo ! Maintenant c'est cassé. :(");
         }
@@ -191,6 +194,7 @@ public class Controller {
     @FXML
     public void putFood(MouseEvent e) {
         stopMovement();
+        ACTION_DONE = false;
         if (started) {
             int x = (int) e.getSceneX() - (int) e.getSceneX() % PACE;
             int y = (int) e.getSceneY() - (int) e.getSceneY() % PACE;
