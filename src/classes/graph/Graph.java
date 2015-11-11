@@ -3,10 +3,7 @@ package classes.graph;
 import classes.MapElement;
 import classes.enumerations.MovementSpeed;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Created by Dimitri on 21/10/2015.
@@ -61,9 +58,9 @@ public class Graph {
 
     public void init() {
         boolean noObstacles = true;
-        for (int y = 0; y <= height; y += pace) {
+        for (int y = 0; y < height; y += pace) {
             Vertex leftVertex = null;
-            for (int x = 0; x <= width; x += pace) {
+            for (int x = 0; x < width; x += pace) {
                 noObstacles = true;
                 for (MapElement obstacle : obstaclesList)
                     if (obstacle.getX() == x && obstacle.getY() == y)
@@ -131,5 +128,11 @@ public class Graph {
         Collections.reverse(path);
 
         return path;
+    }
+
+    public Vertex getRandomVertex(){
+        Random random = new Random();
+        int randIndex = random.nextInt(listVertex.size());
+        return listVertex.get(randIndex);
     }
 }

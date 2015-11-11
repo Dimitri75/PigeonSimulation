@@ -66,24 +66,64 @@ public class Controller {
                     case UP:
                         if (y - PACE >= 0 && checkIfNoObstacles(x, y - PACE))
                             child.setY(y - PACE);
+                        tryNotifyPigeon(child.getX(), child.getY());
                         break;
                     case DOWN:
                         if (y + PACE + child.getShape().getHeight() <= anchorPane.getPrefHeight()
                                 && checkIfNoObstacles(x, y + PACE))
                             child.setY(y + PACE);
+                        tryNotifyPigeon(child.getX(), child.getY());
                         break;
                     case LEFT:
                         if (x - PACE >= 0 && checkIfNoObstacles(x - PACE, y))
                             child.setX(x - PACE);
+                        tryNotifyPigeon(child.getX(), child.getY());
                         break;
                     case RIGHT:
                         if (x + PACE + child.getShape().getWidth() <= anchorPane.getPrefWidth()
                                 && checkIfNoObstacles(x + PACE, y))
                             child.setX(x + PACE);
+                        tryNotifyPigeon(child.getX(), child.getY());
+                        break;
+                    case SPACE:
+                        notifyAllPigeons();
                         break;
                 }
             });
         }
+    }
+
+    public void notifyAllPigeons(){
+        for (Character pigeon : pigeonsList)
+            notifyPigeon(pigeon);
+    }
+
+    public boolean tryNotifyPigeon(int x, int y){
+        Character pigeon;
+        if ((pigeon = getPigeonFromLocation(x, y)) != null){
+            notifyPigeon(pigeon);
+            return true;
+        }
+        return false;
+    }
+
+    public void notifyPigeon(Character pigeon){
+        Vertex start = graph.getVertexByLocation(pigeon.getX(), pigeon.getY());
+        Vertex destination = graph.getRandomVertex();
+
+        pigeon.initPath(graph, start, destination);
+
+        Thread thread = new Thread(pigeon);
+        thread.start();
+
+        pigeonThreads.add(thread);
+    }
+
+    public Character getPigeonFromLocation(int x, int y){
+        for (Character pigeon : pigeonsList)
+            if (pigeon.getX() == x && pigeon.getY() == y)
+                return pigeon;
+        return null;
     }
 
     public void initObstacles() {
@@ -177,6 +217,10 @@ public class Controller {
         for (Food food : foodCircularQueue)
             anchorPane.getChildren().remove(food.getShape());
         foodCircularQueue.clear();
+
+        for (Food food : badFoodCircularQueue)
+            anchorPane.getChildren().remove(food.getShape());
+        badFoodCircularQueue.clear();
 
         for (MapElement obstacle : obstaclesList)
             anchorPane.getChildren().remove(obstacle.getShape());
