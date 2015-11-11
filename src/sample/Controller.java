@@ -17,13 +17,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static classes.Character.ACTION_DONE;
 
@@ -46,7 +40,7 @@ public class Controller {
     private CircularQueue<Food> badFoodCircularQueue = new CircularQueue(3);
     private List<Character> pigeonsList = new ArrayList<>();
     private Character child;
-    private List<Thread> pigeonThreads = new ArrayList<>();
+    private Map<Character, Thread> pigeonThreads = new HashMap<>();
     private List<MapElement> obstaclesList = new ArrayList<>();
 
     public Controller() {
@@ -59,6 +53,9 @@ public class Controller {
 
         if (!started) {
             anchorPane.getScene().addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+                if (!anchorPane.isFocused())
+                    anchorPane.requestFocus();
+
                 int x = (int) child.getShape().getX();
                 int y = (int) child.getShape().getY();
 
@@ -94,6 +91,7 @@ public class Controller {
     }
 
     public void notifyAllPigeons(){
+        stopMovement();
         for (Character pigeon : pigeonsList)
             notifyPigeon(pigeon);
     }
@@ -108,6 +106,10 @@ public class Controller {
     }
 
     public void notifyPigeon(Character pigeon){
+        if (pigeonThreads.containsKey(pigeon))
+            pigeonThreads.get(pigeon).interrupt();
+        pigeonThreads.remove(pigeon);
+
         Vertex start = graph.getVertexByLocation(pigeon.getX(), pigeon.getY());
         Vertex destination = graph.getRandomVertex();
 
@@ -116,7 +118,7 @@ public class Controller {
         Thread thread = new Thread(pigeon);
         thread.start();
 
-        pigeonThreads.add(thread);
+        pigeonThreads.put(pigeon, thread);
     }
 
     public Character getPigeonFromLocation(int x, int y){
@@ -191,6 +193,7 @@ public class Controller {
     public void start() {
         clearAll();
         slider_size.setFocusTraversable(false);
+        button_start.setFocusTraversable(false);
         PACE = (slider_size.getValue() < 10) ? 10 : (int) slider_size.getValue();
         initObstacles();
         initPigeons();
@@ -200,11 +203,13 @@ public class Controller {
     }
 
     @FXML
-    void onPressEnter(KeyEvent event) {
+    void button_start_onKeyEvent(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
             clearAll();
             button_start.fire();
         }
+        else
+            anchorPane.requestFocus();
     }
 
     public void clearAll() {
@@ -269,7 +274,7 @@ public class Controller {
                 Thread thread = new Thread(pigeon);
                 thread.start();
 
-                pigeonThreads.add(thread);
+                pigeonThreads.put(pigeon, thread);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -282,8 +287,8 @@ public class Controller {
 
     public void stopMovement() {
         if (!pigeonThreads.isEmpty()) {
-            for (Thread thread : pigeonThreads)
-                thread.interrupt();
+            for (Map.Entry<Character, Thread> threadEntry : pigeonThreads.entrySet())
+                threadEntry.getValue().interrupt();
 
             pigeonThreads.clear();
         }

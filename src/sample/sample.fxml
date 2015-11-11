@@ -34,7 +34,7 @@
                                textFill="white">
 
                         </Label>
-                        <Button fx:id="button_start" onAction="#start" onKeyPressed="#onPressEnter" text="Start"
+                        <Button fx:id="button_start" onAction="#start" onKeyPressed="#button_start_onKeyEvent" text="Start"
                                 textAlignment="CENTER">
                             <HBox.margin>
                                 <Insets/>
