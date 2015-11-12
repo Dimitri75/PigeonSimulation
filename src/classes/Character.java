@@ -16,10 +16,11 @@ public class Character extends MapElement implements Runnable {
     private int characterImageIndex;
     private Position position;
     private List<Vertex> path;
-    public static boolean ACTION_DONE;
+    private boolean actionDone;
 
     public Character(int x, int y, int shapeSize) {
         super(x, y, shapeSize);
+        actionDone = false;
         characterImageIndex = ResourcesUtils.getInstance().getRandomBirdIndex();
 
         position = Position.LEFT;
@@ -31,6 +32,15 @@ public class Character extends MapElement implements Runnable {
 
     public Character(int x, int y, int shapeSize, Image image) {
         super(x, y, shapeSize, image);
+        actionDone = false;
+    }
+
+    public boolean isActionDone() {
+        return actionDone;
+    }
+
+    public void setActionDone(boolean actionDone) {
+        this.actionDone = actionDone;
     }
 
     public void changePosition() {
@@ -52,9 +62,9 @@ public class Character extends MapElement implements Runnable {
     @Override
     public void run() {
         if (path != null) {
-            ACTION_DONE = false;
+            actionDone = false;
             for (Vertex vertex : path) {
-                if (!ACTION_DONE) {
+                if (!actionDone) {
                     if (vertex.getX() < x && position.equals(Position.RIGHT)) {
                         changePosition();
                     } else if (vertex.getX() > x && position.equals(Position.LEFT)) {
@@ -74,7 +84,7 @@ public class Character extends MapElement implements Runnable {
                     });
                 }
             }
-            ACTION_DONE = true;
+            actionDone = true;
         }
     }
 }

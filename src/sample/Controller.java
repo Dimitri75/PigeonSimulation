@@ -8,7 +8,6 @@ import classes.enumerations.Image;
 import classes.graph.Graph;
 import classes.graph.Vertex;
 import classes.list.CircularQueue;
-import com.sun.org.apache.bcel.internal.generic.GOTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,8 +19,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.*;
-
-import static classes.Character.ACTION_DONE;
 
 public class Controller {
     @FXML
@@ -103,14 +100,14 @@ public class Controller {
         do {
             areVertexesMisplaced = false;
 
-            FOR_TO_BRAKE:
+            FOR_TO_BREAK:
             for (int i = 0; i < vertexes.size(); i++) {
-                for (int y = vertexes.size() - 1; y >= 0; y--) {
+                for (int y = 0; y < vertexes.size(); y++) {
                     if (i != y) {
                         if (areVertexesTooClose(vertexes.get(i), vertexes.get(y))) {
                             vertexes.set(y, graph.getRandomVertex());
                             areVertexesMisplaced = true;
-                            break FOR_TO_BRAKE;
+                            break FOR_TO_BREAK;
                         }
                     }
                 }
@@ -356,7 +353,7 @@ public class Controller {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (ACTION_DONE && !foodCircularQueue.isEmpty()) {
+                        if (isOnePigeonDone() && !foodCircularQueue.isEmpty()) {
                             stopMovement();
 
                             Food badFood;
@@ -367,16 +364,30 @@ public class Controller {
                             else if ((badFood = badFoodCircularQueue.pushAndPopExcedent(chasedFood)) != null)
                                 anchorPane.getChildren().remove(badFood.getShape());
 
-                            ACTION_DONE = false;
+                            setPigeonsActionDone(false);
                             timer.cancel();
 
                             if (!foodCircularQueue.isEmpty())
                                 startChasingFood();
+                            else
+                                notifyAllPigeons();
                         }
                     }
                 });
             }
         }, 0, 250);
+    }
+
+    public boolean isOnePigeonDone(){
+        for (Character pigeon : pigeonsList)
+            if (pigeon.isActionDone())
+                return true;
+        return false;
+    }
+
+    public void setPigeonsActionDone(boolean bool){
+        for (Character pigeon : pigeonsList)
+            pigeon.setActionDone(bool);
     }
 }
 
