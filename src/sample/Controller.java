@@ -281,6 +281,7 @@ public class Controller {
             int x = (int) e.getSceneX() - (int) e.getSceneX() % PACE;
             int y = (int) e.getSceneY() - (int) e.getSceneY() % PACE;
 
+            stopMovement();
             if (checkIfNoObstacles(x, y)) {
                 if (!foodCircularQueue.isEmpty()) {
                     foodCircularQueue.peek().setFoodState(FoodState.BAD);
@@ -302,6 +303,7 @@ public class Controller {
 
     public void startChasingFood() {
         try {
+            stopMovement();
             startTimer();
             for (Character pigeon : pigeonsList) {
                 Vertex destination = graph.getVertexByLocation(foodCircularQueue.peek().getX(), foodCircularQueue.peek().getY());
@@ -317,10 +319,6 @@ public class Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void startScattering() {
-        //TODO les pigeons qui se dispersent
     }
 
     public void stopMovement() {
