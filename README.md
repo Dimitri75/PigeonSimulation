@@ -1,9 +1,9 @@
-<h1>Simulation de pigeons développée par Dimitri BUHON et Kevin SUY</h1>
+<h1>Simulation de pigeons</h1>
 
 Le calcul des chemins est fait à l'aide de l'algorithme de Dijkstra, qui trouve le plus court chemin jusqu'à la nourriture.
 
 <h2>Commencer une partie</h2>
-Faire gliser le slider permettant de régler la taille de la carte<br/>
+Faire glisser le slider permettant de régler la taille de la carte<br/>
 Cliquer sur "Start"
 
 <h2>Faire intéragir les pigeons</h2>
